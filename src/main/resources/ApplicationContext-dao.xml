@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/mvc
+                           http://www.springframework.org/schema/mvc/spring-mvc.xsd
+                           http://www.springframework.org/schema/aop
+                           http://www.springframework.org/schema/aop/spring-aop.xsd
+                           http://www.springframework.org/schema/context
+                           http://www.springframework.org/schema/context/spring-context.xsd
+                           http://www.springframework.org/schema/jdbc
+                           http://www.springframework.org/schema/jdbc/spring-jdbc.xsd
+                           http://www.springframework.org/schema/data/jpa
+                           http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
+        <!-- spring 和 spring data jpa的配置 -->
+        <!-- 1.创建entityManagerFactory 对象，交给spring容器管理-->
+        <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+                <!-- 注入dataSource数据库连接池 -->
+                <property name="dataSource" ref="dataSource"/>
+                <!-- 注入包扫描器 实体类所在的包，自动扫描所有实体类，并注册到spring容器中-->
+                <property name="packagesToScan" value="com.hzg.entity"/>
+                <!-- JPA的实现方式,Hibernate服务的提供者-->
+                <property name="persistenceProvider">
+                        <!--提供Hibernate对象交给spring容器 作用域只在entityManagerFactory中有效-->
+                        <bean class="org.hibernate.jpa.HibernatePersistenceProvider"/>
+                </property>
+                <!-- JPA供应商适配器，由谁实现JPA-->
+                <property name="jpaVendorAdapter">
+                        <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+                                <!--设置是否自动创建数据库表为-->
+                                <property name="generateDdl" value="false"/>
+                                <!--设置数据库类型 MSSQL数据库-->
+                                <property name="database" value="SQL_SERVER"/>
+                                <!--设置数据库方言：支持的特有语法-->
+                                <property name="databasePlatform" value="org.hibernate.dialect.SQLServer2008Dialect"/>
+                                <!--设置数据库是否显示sql语句-->
+                                <property name="showSql" value="true"/>
+                              
+                        </bean>
+                </property>
+                <!-- 配置JPA方言:高级特性，如用不到可以不写-->
+                <property name="jpaDialect">
+                        <!--注入HibernateJPA高级特性-->
+                        <bean class="org.springframework.orm.jpa.vendor.HibernateJpaDialect"/>
+                </property>
+        </bean>
+        <!-- 2.创建数据库连接池
+                id必须为dataSource
+                class为C3P0的连接池
+        -->
+        <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+                <!--配置数据库连接用户名-->
+                <property name="user" value="tsbio"></property>
+                <!--配置数据库连接密码-->
+                <property name="password" value="ts@801"></property>
+                <!--配置数据库连接地址-->
+                <property name="jdbcUrl" value="jdbc:sqlserver://localhost:1433; DatabaseName=tsbio"></property>
+                <!--配置数据库驱动-->
+                <property name="driverClass" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"></property>
+
+        </bean>
+
+        <!--3。整合Spring data JPA
+        base-package:为操作数据库接口所在的包
+        transaction-manager-ref：为事务管理器
+        entity-manager-factory-ref:JPA
+        -->
+        <jpa:repositories base-package="com.hzg.repository" transaction-manager-ref="transactionManager"
+                          entity-manager-factory-ref="entityManagerFactory"></jpa:repositories>
+
+        <!-- 4.配置事务管理器
+                id必须为"transactionManager"
+         -->
+        <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+                <!--注入entityManagerFactory工厂-->
+                <property name="entityManagerFactory" ref="entityManagerFactory"></property>
+        </bean>
+        <!-- 5.配置声明式事务，用于service层 略-->
+        <!-- 6.配置主角包扫描,扫描com.hzg下所有注解-->
+        <context:component-scan base-package="com.hzg"></context:component-scan>
+
+
+     
+</beans>
