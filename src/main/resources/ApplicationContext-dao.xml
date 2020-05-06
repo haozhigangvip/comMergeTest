@@ -38,6 +38,7 @@
                         <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
                                 <!--设置是否自动创建数据库表为-->
                                 <property name="generateDdl" value="false"/>
+                                
                                 <!--设置数据库类型 MSSQL数据库-->
                                 <property name="database" value="SQL_SERVER"/>
                                 <!--设置数据库方言：支持的特有语法-->

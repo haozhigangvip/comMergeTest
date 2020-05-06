@@ -28,7 +28,7 @@ public class CompanyServiceImpl implements CompanyService{
    
     @Override
     public List<Company> findCompanyByLikeNameOrID(String companyNameOrID){
-    	Pageable pg=new PageRequest(0, 10);
+    	Pageable pg=new PageRequest(0, 20);
     	Specification<Company> spec=new Specification<Company>() {
 
 			@Override
