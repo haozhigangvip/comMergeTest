@@ -79,7 +79,7 @@
 			<!-- /.row -->
 			<div class="panel panel-default">
 				<div class="panel-body">
-						<form class="form-inline" action="${pageContext.request.contextPath }/customer/list.action" method="get">
+						<form class="form-inline" action="${pageContext.request.contextPath }/toSourceList.action" method="post">
 							<div class="form-group">
 								<label for="customerName">客户名称</label> 
 								<input id="search_kw" type="text" name="myname" class="form-control ui-com"  placeholder="请输入基金关键字"  value="${custName }">
@@ -99,29 +99,21 @@
 						<table class="table table-bordered table-striped">
 							<thead>
 								<tr>
-									<th>ID</th>
-									<th>客户名称</th>
-									<th>客户来源</th>
-									<th>客户所属行业</th>
-									<th>客户级别</th>
-									<th>固定电话</th>
-									<th>手机</th>
-									<th>操作</th>
+									<th>comID</th>
+									<th>公司名称</th>
+									
 								</tr>
 							</thead>
 							<tbody>
-								<c:forEach items="${page.rows}" var="row">
+							
+								<c:forEach items="${sessionScope.SourceList}" var="row">
+								
 									<tr>
-										<td>${row.cust_id}</td>
-										<td>${row.cust_name}</td>
-										<td>${row.cust_source}</td>
-										<td>${row.cust_industry}</td>
-										<td>${row.cust_level}</td>
-										<td>${row.cust_phone}</td>
-										<td>${row.cust_mobile}</td>
+										<td>${row.comID}</td>
+										<td>${row.companyname}</td>
 										<td>
-											<a href="#" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#customerEditDialog" onclick="editCustomer(${row.cust_id})">修改</a>
-											<a href="#" class="btn btn-danger btn-xs" onclick="deleteCustomer(${row.cust_id})">删除</a>
+											<a href="#" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#customerEditDialog" onclick="editCustomer(${row.comID})">修改</a>
+											<a href="#" class="btn btn-danger btn-xs" onclick="deleteCustomer(${row.comID})">删除</a>
 										</td>
 									</tr>
 								</c:forEach>
@@ -171,16 +163,21 @@
 	<script src="<%=basePath%>js/jquery-ui.js"></script>
 	
    	
-
+<<script type="text/javascript">
+List list=(List)session.getAttribute("LIST"); 
+</script>
 <script type="text/javascript">
+
+
 jQuery(function ($) {
+
 $(document).ready(function () {  
     (function(){  
         var insertOptions = function(data, id) {  
             
         	var result = new Array();  
         	 for(var ii=0,rr=data.length;ii<rr;ii++){
-        		 result.push(data[ii]['comID']+"	" +data[ii]['companyname']);
+        		 result.push(data[ii]['comID']+"-" +data[ii]['companyname']);
         		 
         		 } 
 
@@ -221,8 +218,8 @@ $(document).ready(function () {
         	
             
             var $url="${pageContext.request.contextPath}/convertCompany.action";
-            var skeyword =JSON.stringify({'Sourcecompanys':[{'comID':'COM10000010'},{'comID':'COM10000011'}] ,'targetCompany':'COM10000012'});
-
+            var skeyword=JSON.stringify({'Sourcecompanys':[{'comID':'COM10000006'},{'comID':'COM10000013'}],'targetCompany':{'comID':'COM10000012'}});
+            alert(skeyword);
             $.ajax({
             	type: "post",
                 url:  $url,
@@ -232,7 +229,7 @@ $(document).ready(function () {
 
                 success: function(data) {
                 	
-                	alert(data['success']);
+                	alert(data['Success']);
                     }
 
                 });

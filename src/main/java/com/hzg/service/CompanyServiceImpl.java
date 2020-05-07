@@ -81,12 +81,14 @@ public class CompanyServiceImpl implements CompanyService{
     		
     		if(sourceCompanyID!=null &&sourceCompanyID!=""&&targetCompanyID!=null && targetCompanyID!="" ){
     			try{
+    			if(comMerge.findCompanyMergeHistoryByComID(sourceCompanyID)==null){
     			CompanyMergeHistory compMergeHistory=new CompanyMergeHistory();
     			compMergeHistory.setCompanyID_New(targetCompanyID);
     			compMergeHistory.setCompanyID_Old(sourceCompanyID);
     			compMergeHistory.setCreatime(new Timestamp(System.currentTimeMillis()));
     			comMerge.save(compMergeHistory);
     			result=1;
+    			}
     			}catch(Exception e)
     			{
     				System.out.println(e.getMessage());
@@ -95,5 +97,15 @@ public class CompanyServiceImpl implements CompanyService{
     		
     		return result;	
     	}
+    	
+    	 @Override
+    	    public Company  findCompanyBycomID(String companyComID){
+    	    	
+    			
+    	        Company com=companyDao.findCompanyByComID(companyComID);
+    	        
+    	        return com;
+    	    }
+    	
 }
  

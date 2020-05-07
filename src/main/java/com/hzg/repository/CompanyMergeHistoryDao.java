@@ -1,8 +1,12 @@
 package com.hzg.repository;
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import com.hzg.entity.Company;
 import com.hzg.entity.CompanyMergeHistory;
 
 
@@ -15,6 +19,7 @@ import com.hzg.entity.CompanyMergeHistory;
  */
 @Repository
 public interface CompanyMergeHistoryDao extends JpaRepository<CompanyMergeHistory,Integer>, JpaSpecificationExecutor<CompanyMergeHistory> {
-
+		@Query(value="From CompanyMergeHistory where CompanyID_Old =?")
+	    public CompanyMergeHistory findCompanyMergeHistoryByComID(String ComID);
    
 }

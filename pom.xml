@@ -16,6 +16,12 @@
   
   <dependencies>
   <dependency>
+            <groupId>net.sf.json-lib</groupId>
+            <artifactId>json-lib</artifactId>
+            <version>2.4</version>
+            <classifier>jdk15</classifier>
+</dependency>
+  <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-webmvc</artifactId>
       <version>${spring.version}</version>
@@ -145,7 +151,7 @@
        <version>2.9.5</version>
   </dependency>
 
-    
+
   </dependencies>
   <build>
     <finalName>CompMerge</finalName>

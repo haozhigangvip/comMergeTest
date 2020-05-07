@@ -41,7 +41,7 @@
                 <!-- 前缀为：JSP所在的路径 -->
                 <property name="prefix" value="/"></property>
                 <!-- 后缀为：JSP文件的后缀名 -->
-                <property name="suffix" value="jsp"></property>
+                <property name="suffix" value=".jsp"></property>
         </bean>
 
 
