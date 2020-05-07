@@ -3,6 +3,7 @@ package com.hzg.controller;
 import com.hzg.entity.Company;
 import com.hzg.service.CompanyService;
 import com.hzg.service.CompanyServiceImpl;
+import com.hzg.vo.CompanyConvert;
 import com.hzg.vo.CompanyQueryVo;
 
 import java.util.ArrayList;
@@ -40,6 +41,30 @@ public class CompanyController {
 
 	       
 	        return cv;
-	    }
+	    } 
+	  	
+		@RequestMapping("/convertCompany")
+	    @ResponseBody
+	    public String Convert(@RequestBody CompanyConvert cc ){
+			
+			System.out.println(cc);
+			String targetCompanyID=cc.getTargetCompany().getComID();
+			String sourceCompanycomID=null;
+
+			Integer result=0;
+			List<Company> list=cc.getSourcecompanys();
+			for (Company company : list) {
+				sourceCompanycomID=company.getComID();
+				result=customerService.ConvertCompany(sourceCompanycomID, targetCompanyID);
+				if(result==1){
+					result=customerService.UpdateCompanyDelTarg(sourceCompanycomID, 1);
+				
+				}
+				
+			}
+			
+				return "{Success:"+result+"}";
+			
+	  	}
 
 }

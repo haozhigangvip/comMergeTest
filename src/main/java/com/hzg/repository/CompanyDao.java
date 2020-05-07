@@ -28,7 +28,8 @@ public interface CompanyDao extends JpaRepository<Company,Integer>, JpaSpecifica
 
     @Query(value="From Company where companyname like  %?1%")
     public List<Company> findCompanyByName(String companyname);
-    
+    @Query(value="From Company where comID = ?")
+    public Company findCompanyByComID(String companyComID);
     
 
 }

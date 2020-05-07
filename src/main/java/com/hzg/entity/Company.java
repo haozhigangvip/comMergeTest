@@ -37,7 +37,7 @@ public class Company {
     @Column(name = "AutoID")
     private Integer AutoID;
 
-    @Column(name = "comID")
+    @Column(name = "comID" ,updatable = false)
     private String comID;
     public String getComID() {
 		return comID;
@@ -59,7 +59,7 @@ public class Company {
     private String abbre;
     @Column(name = "note")
     private String note;
-    @Column(name = "creatime")
+    @Column(name = "creatime",updatable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
     @UpdateTimestamp
     private Timestamp creatime;
@@ -68,11 +68,20 @@ public class Company {
 //    private Date comstamp;
     @Column(name = "csalesman")
     private String csalesman;
+    @Column(name="delTarg")
+    private Integer delTarg;
 
 
 
+    public Integer getDelTarg() {
+		return delTarg;
+	}
 
-    public String getComadrID() {
+	public void setDelTarg(Integer delTarg) {
+		this.delTarg = delTarg;
+	}
+
+	public String getComadrID() {
         return comadrID;
     }
 

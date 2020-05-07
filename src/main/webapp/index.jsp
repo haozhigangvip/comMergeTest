@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-         pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"  pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <%@ page trimDirectiveWhitespaces="true"%>
@@ -86,6 +85,7 @@
 								<input id="search_kw" type="text" name="myname" class="form-control ui-com"  placeholder="请输入基金关键字"  value="${custName }">
 							</div>
 							<button type="submit" class="btn btn-primary">查询</button>
+							<button type="button" class="btn btn-primary" id="test">测试</button>
 						</form>	
 				</div>
 			</div>
@@ -196,8 +196,8 @@ $(document).ready(function () {
         	
             var right_id = "search_kw";  
             var $url="${pageContext.request.contextPath}/searchCompany.action";
-            
-            var skeyword =JSON.stringify({'companyname': $("#search_kw").val().trim()});
+        
+           var skeyword =JSON.stringify({'companyname': $("#search_kw").val().trim()});
             $.ajax({
             	type: "post",
                 url:  $url,
@@ -207,7 +207,32 @@ $(document).ready(function () {
                 data : skeyword,
                 cache: false,
                 success: function(data) {
-                        insertOptions(data['listCompany'], right_id);
+             
+                	 insertOptions(data['listCompany'], right_id);   
+                	
+                    }
+
+                });
+        });  
+        
+        
+        
+        $('#test').click(function(){  
+        	
+            
+            var $url="${pageContext.request.contextPath}/convertCompany.action";
+            var skeyword =JSON.stringify({'Sourcecompanys':[{'comID':'COM10000010'},{'comID':'COM10000011'}] ,'targetCompany':'COM10000012'});
+
+            $.ajax({
+            	type: "post",
+                url:  $url,
+                contentType:"application/json;charset=utf-8",
+                dataType : 'json',
+                data : skeyword,
+
+                success: function(data) {
+                	
+                	alert(data['success']);
                     }
 
                 });
