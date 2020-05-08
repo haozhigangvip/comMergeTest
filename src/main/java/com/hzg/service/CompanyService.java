@@ -11,7 +11,7 @@ public interface CompanyService {
 
 
 
-	public int UpdateCompanyDelTarg(String companyID,int value);
+	public int UpdateCompanyDelTag(String companyID,int value);
 
 	public Company  findCompanyBycomID(String companyID);
 

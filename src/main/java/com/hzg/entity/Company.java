@@ -68,17 +68,17 @@ public class Company {
 //    private Date comstamp;
     @Column(name = "csalesman")
     private String csalesman;
-    @Column(name="delTarg")
-    private Integer delTarg;
+    @Column(name="delTag")
+    private Integer delTag;
 
 
 
-    public Integer getDelTarg() {
-		return delTarg;
+    public Integer getDelTag() {
+		return delTag;
 	}
 
-	public void setDelTarg(Integer delTarg) {
-		this.delTarg = delTarg;
+	public void setDelTag(Integer delTag) {
+		this.delTag = delTag;
 	}
 
 	public String getComadrID() {

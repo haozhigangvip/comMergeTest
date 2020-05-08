@@ -44,9 +44,13 @@ public class CompanyServiceImpl implements CompanyService{
 			public Predicate toPredicate(Root<Company> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 				Path<Object> companyname =root.get("companyname");
 				Path<Object> comID =root.get("comID");
+				Path<Object> deltag =root.get("delTag");
 				Predicate likename= cb.like(companyname.as(String.class), "%"+companyNameOrID+"%");
 				Predicate eqid= cb.like(comID.as(String.class), "%"+companyNameOrID+"%");
-				Predicate or =cb.or(likename,eqid);
+				Predicate del= cb.notEqual(deltag.as(Integer.class), 1);
+				Predicate del1= cb.isNull(deltag.as(Integer.class));
+				Predicate or =cb.and(cb.or(likename,eqid),cb.or(del,del1));
+				
 				// TODO Auto-generated method stub
 				return or;
 			}
@@ -58,11 +62,11 @@ public class CompanyServiceImpl implements CompanyService{
     }
     
     	@Override
-    	public int UpdateCompanyDelTarg(String companyID,int value){
+    	public int UpdateCompanyDelTag(String companyID,int value){
     		int result=0;
     		Company com=companyDao.findCompanyByComID(companyID);
     		if(com!=null){
-    			com.setDelTarg(value);
+    			com.setDelTag(value);
     			try {
 					companyDao.save(com);
 					result=1;

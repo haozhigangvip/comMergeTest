@@ -10,7 +10,6 @@
 %>
 <head>
 <title>客户列表-BootCRM</title>
-
 <!-- Bootstrap Core CSS -->
 <link href="<%=basePath%>css/bootstrap.min.css" rel="stylesheet">
 <!-- MetisMenu CSS -->
@@ -25,7 +24,6 @@
 <link href="<%=basePath%>css/boot-crm.css" rel="stylesheet" type="text/css">
 <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 
-	
     <style type="text/css">
       .ui-com {
         font-size: 14px;
@@ -49,7 +47,7 @@
 				data-target=".navbar-collapse">
 				
 			</button>
-			<a class="navbar-brand" href="#">BOOT客户管理系统 v2.0</a>
+			<a class="navbar-brand" href="#">客户合并</a>
 		</div>
 
 
@@ -59,42 +57,45 @@
 					<li class="sidebar-search">
 						
 					</li>
-					<li><a href="	" class="active"><i
-							class="fa fa-edit fa-fw"></i> 客户管理</a></li>
-					<li><a href="salevisit.action"><i
-							class="fa fa-dashboard fa-fw"></i> 客户拜访</a></li>
+					<li><a href="" class="active"> 客户管理</a></li>
+					<li><a href="salevisit.action">客户拜访</a></li>
 				</ul>
 			</div>
 			<!-- /.sidebar-collapse -->
 		</div>
 	</nav>
 	
-	<div id="page-wrapper">
-			<div class="row">
+	
+		<div id="page-wrapper" >
+			<div class="row ">
 				<div class="col-lg-12">
 					<h1 class="page-header">客户管理</h1>
 				</div>
 				<!-- /.col-lg-12 -->
 			</div>
+			<div class="row mx-md-n5">
+ </div>
+			
+			
+			
 			<!-- /.row -->
 			<div class="panel panel-default">
 				<div class="panel-body">
-						<form class="form-inline" action="${pageContext.request.contextPath }/toSourceList.action" method="post">
+						<form class="form-inline" action="${pageContext.request.contextPath }/addSourceList.action" method="post">
 							<div class="form-group">
-								<label for="customerName">客户名称</label> 
-								<input id="search_kw" type="text" name="myname" class="form-control ui-com"  placeholder="请输入基金关键字"  value="${custName }">
+								<label for="customerName">公司名称</label> 
+								<input id="search_kw" type="text" name="myname" class="form-control ui-com"  placeholder="请输入需要合并的公司名称"  value="${custName }">
 							</div>
-							<button type="submit" class="btn btn-primary">查询</button>
-							<button type="button" class="btn btn-primary" id="test">测试</button>
+							<button type="submit" class="btn btn-primary">加入</button>
 						</form>	
 				</div>
 			</div>
 			
-			
+			 <div class="col px-md-5">
 			<div class="row">
 				<div class="col-lg-12">
 					<div class="panel panel-default">
-						<div class="panel-heading">客户信息列表</div>
+						<div class="panel-heading">待合并的公司信息列表</div>
 						<!-- /.panel-heading -->
 						<table class="table table-bordered table-striped">
 							<thead>
@@ -112,28 +113,42 @@
 										<td>${row.comID}</td>
 										<td>${row.companyname}</td>
 										<td>
-											<a href="#" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#customerEditDialog" onclick="editCustomer(${row.comID})">修改</a>
-											<a href="#" class="btn btn-danger btn-xs" onclick="deleteCustomer(${row.comID})">删除</a>
+											
+											<button  class="btn btn-danger btn-xs" onclick="removeSession('${row.comID}')">移除</button>
+										
+						
 										</td>
 									</tr>
 								</c:forEach>
 							</tbody>
 						</table>
+						
 						<div class="col-md-12 text-right">
-							<itcast:page url="${pageContext.request.contextPath }/customer/list.action" />
+							<button type="button" class="btn btn-primary" id="clear" onclick="clearSession()">清空</button>
 						</div>
 						<!-- /.panel-body -->
 					</div>
 					<!-- /.panel -->
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
 				</div>
 				<!-- /.col-lg-12 -->
 			</div>
 		</div>
-
-
-</div>
-
-
+		</div>
+		</div>
+		
+		
 
 
 
@@ -163,9 +178,27 @@
 	<script src="<%=basePath%>js/jquery-ui.js"></script>
 	
    	
-<<script type="text/javascript">
-List list=(List)session.getAttribute("LIST"); 
+
 </script>
+
+<script type="text/javascript">
+function removeSession(com){
+	var httpRequest = new XMLHttpRequest();//第一步：创建需要的对象
+	httpRequest.open('POST', '${pageContext.request.contextPath }/removeSourceList.action', true); //第二步：打开连接
+	httpRequest.setRequestHeader("Content-type","application/x-www-form-urlencoded");//设置请求头 注：post方式必须设置请求头（在建立连接后设置请求头）
+	httpRequest.send('comID='+com);//发送请求 将情头体写在send中
+	location.reload();
+}
+function clearSession(){
+	var httpRequest = new XMLHttpRequest();//第一步：创建需要的对象
+	httpRequest.open('POST', '${pageContext.request.contextPath }/clearSourceList.action', true); //第二步：打开连接
+	httpRequest.setRequestHeader("Content-type","application/x-www-form-urlencoded");//设置请求头 注：post方式必须设置请求头（在建立连接后设置请求头）
+	httpRequest.send();//发送请求 将情头体写在send中
+	location.reload();
+}
+
+</script>
+
 <script type="text/javascript">
 
 
@@ -200,7 +233,6 @@ $(document).ready(function () {
                 url:  $url,
                 processData: false,
                 contentType:"application/json;charset=utf-8",
-                dataType : 'json',
                 data : skeyword,
                 cache: false,
                 success: function(data) {
@@ -213,7 +245,7 @@ $(document).ready(function () {
         });  
         
         
-        
+    
         $('#test').click(function(){  
         	
             

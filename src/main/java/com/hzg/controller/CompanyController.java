@@ -3,6 +3,7 @@ package com.hzg.controller;
 import com.hzg.entity.Company;
 import com.hzg.service.CompanyService;
 import com.hzg.service.CompanyServiceImpl;
+import com.hzg.utils.myUtils;
 import com.hzg.vo.CompanyConvert;
 import com.hzg.vo.CompanyQueryVo;
 
@@ -10,18 +11,22 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import net.sf.json.JsonConfig;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.jasper.tagplugins.jstl.core.ForEach;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -32,18 +37,18 @@ public class CompanyController {
 	
 	  	@RequestMapping("/searchCompany")
 	    @ResponseBody
-	    public  CompanyQueryVo json(@RequestBody  Company company)  {
+	    public  CompanyQueryVo json(@RequestBody  Company company ,HttpSession session)  {
 	  		
 	        String cname=company.getCompanyname().trim();
-	        System.out.println(cname);
 	        List<Company> ls=new ArrayList<Company>();
-	       
+	        List<Company> session_list=(List<Company>)session.getAttribute("SourceList");
 	        if(cname!=null &cname!=""){
-	        	
+	        
 	        	ls=customerService.findCompanyByLikeNameOrID(cname);
 	        
 	        }
-	        
+
+
 	        CompanyQueryVo cv=new CompanyQueryVo();
 	        cv.setSuccess(1);
 	        cv.setListCompany(ls);
@@ -59,7 +64,6 @@ public class CompanyController {
 			Integer result=0;
 			String sourceCompanycomID=null;
 			String targetCompanyID=cc.getJSONObject("targetCompany").getString("comID");
-			System.out.println(targetCompanyID);
 			JSONArray jan = (JSONArray) cc.get("Sourcecompanys"); 
 			if(jan!=null||jan.size()!=0){ 
 				for(int i=0;i<jan.size();i++){
@@ -67,7 +71,7 @@ public class CompanyController {
 					sourceCompanycomID=jo.getString("comID");
 					result=customerService.ConvertCompany(sourceCompanycomID, targetCompanyID);
 					if(result==1){
-						result=customerService.UpdateCompanyDelTarg(sourceCompanycomID, 1);
+						result=customerService.UpdateCompanyDelTag(sourceCompanycomID, 1);
 					
 					}
 				} 
@@ -79,32 +83,81 @@ public class CompanyController {
 			
 	  	}
 		
-		@RequestMapping("/toSourceList")
-	    @ResponseBody
-	    public  ModelAndView  toSourceList(HttpServletRequest request,HttpSession session)  {
-			String para=request.getParameter("myname");
-			
+		@RequestMapping("/")
+		public ModelAndView index(){
 			ModelAndView modelAndView=new ModelAndView();
-			modelAndView.setViewName("index");
-			int e=para.indexOf("-");
+			return modelAndView;
+		}
+			
+		@RequestMapping("/clearSourceList")
+	    @ResponseBody
+	    public  void  clearSourceList(HttpSession session,HttpServletResponse response)  {
+			
+			session.setAttribute("SourceList",null);
+			try {
+				response.sendRedirect("index.jsp");
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		@RequestMapping("/removeSourceList")
+	    public  String  removeSourceList(@RequestParam("comID") String comID,HttpSession session,HttpServletResponse response)  {
+			
+			System.out.println(comID);
+			
+			 List<Company> ls = (List<Company>)session.getAttribute("SourceList");
+			 List<Company> newls=new ArrayList<Company>();
+			 if(ls!=null){
+			 for (Company company : ls) {
+				if(!(company.getComID().trim().equals(comID))){
+					newls.add(company);
+				}
+			}
+			
+			session.setAttribute("SourceList", newls);
+			 }
+			 
+			return "redirect:/";
+		}
+		
+		@RequestMapping("/addSourceList")
+	    @ResponseBody
+	    public  void  addSourceList(HttpServletRequest request,HttpSession session,HttpServletResponse response)  {
+			String para=request.getParameter("myname");
+			int e=0;
+			ModelAndView modelAndView=new ModelAndView();
+			modelAndView.setViewName("/index.jsp");
+			if(para!=null){
+			e=para.indexOf("-");
+			}
 			if( e>0){
 				String comid=para.substring(0,e);
 		
 				Company com=customerService.findCompanyBycomID(comid);
 				if(com!=null){
-					System.out.println(com.toString());
+					
 					
 					List<Company> list=(List<Company>)session.getAttribute("SourceList");
+					
 					if(list==null){
 						list=new ArrayList<Company>();
 					}
+					if(myUtils.chkCompanyList(list,com)==0){
 					list.add(com);
 					session.setAttribute("SourceList", list);
-					
+					}
 				}
 			}
 			
-			return modelAndView;
+			try {
+				response.sendRedirect("index.jsp");
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+				
+			}
 			
 		}
 		

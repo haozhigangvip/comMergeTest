@@ -44,7 +44,7 @@ public class test {
     
     @Test
     public void testUpdateDel(){
-    	customerService.UpdateCompanyDelTarg("COM10000009",0);
+    	customerService.UpdateCompanyDelTag("COM10000009",0);
     }
 
 }
