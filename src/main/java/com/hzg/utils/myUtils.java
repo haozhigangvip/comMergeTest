@@ -1,5 +1,6 @@
 package com.hzg.utils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.hzg.entity.Company;
@@ -18,15 +19,25 @@ public static  int chkCompanyList(List<Company> list,Company CheckCompany){
 }
 
 public static  List<Company>  chkCompanyList(List<Company> sourcelist,List<Company> targetlist){
+	List<Company> ls =new ArrayList<Company>();
+	
+	int tag;
 	
 	for (Company source_company : sourcelist) {
-		for(Company target_company : targetlist)
-		if(source_company.getComID().toString().trim().equals(target_company.getComID().toString().trim())){
-			sourcelist.remove(source_company);
+		tag=1;
+		for(Company target_company : targetlist){
+				if(source_company.getComID().trim().equals(target_company.getComID().trim())==true){
+				tag=0;
 			
+
+			}
+		}
+		if (tag==1){
+			ls.add(source_company);
 		}
 	}
-	return sourcelist;
+	return ls;
 }
-;
+
+
 }

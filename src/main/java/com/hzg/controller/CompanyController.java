@@ -42,10 +42,21 @@ public class CompanyController {
 	        String cname=company.getCompanyname().trim();
 	        List<Company> ls=new ArrayList<Company>();
 	        List<Company> session_list=(List<Company>)session.getAttribute("SourceList");
+	        List<Company> session_list1=(List<Company>)session.getAttribute("TargetList");
+	        List<Company> session_ls=new ArrayList<Company>();
+	        if(session_list!=null){
+	        	session_ls.addAll(session_list);
+	        }
+	        if(session_list1!=null){
+	        	session_ls.addAll(session_list1);
+	        }
+	        
 	        if(cname!=null &cname!=""){
 	        
 	        	ls=customerService.findCompanyByLikeNameOrID(cname);
-	        
+	            if(ls!=null && session_ls!=null){
+	        	ls=myUtils.chkCompanyList(ls, session_ls);
+	        	}
 	        }
 
 
@@ -83,11 +94,7 @@ public class CompanyController {
 			
 	  	}
 		
-		@RequestMapping("/")
-		public ModelAndView index(){
-			ModelAndView modelAndView=new ModelAndView();
-			return modelAndView;
-		}
+	
 			
 		@RequestMapping("/clearSourceList")
 	    @ResponseBody
@@ -103,11 +110,9 @@ public class CompanyController {
 		}
 		
 		@RequestMapping("/removeSourceList")
-	    public  String  removeSourceList(@RequestParam("comID") String comID,HttpSession session,HttpServletResponse response)  {
-			
-			System.out.println(comID);
-			
-			 List<Company> ls = (List<Company>)session.getAttribute("SourceList");
+	    public  String  removeSourceList(@RequestParam("comID") String comID,@RequestParam("session_name") String session_name,HttpSession session,HttpServletResponse response)  {
+			System.out.println("sss:"+session_name);
+			List<Company> ls = (List<Company>)session.getAttribute(session_name);
 			 List<Company> newls=new ArrayList<Company>();
 			 if(ls!=null){
 			 for (Company company : ls) {
@@ -116,7 +121,7 @@ public class CompanyController {
 				}
 			}
 			
-			session.setAttribute("SourceList", newls);
+			session.setAttribute(session_name, newls);
 			 }
 			 
 			return "redirect:/";
@@ -127,8 +132,7 @@ public class CompanyController {
 	    public  void  addSourceList(HttpServletRequest request,HttpSession session,HttpServletResponse response)  {
 			String para=request.getParameter("myname");
 			int e=0;
-			ModelAndView modelAndView=new ModelAndView();
-			modelAndView.setViewName("/index.jsp");
+			
 			if(para!=null){
 			e=para.indexOf("-");
 			}
@@ -144,6 +148,7 @@ public class CompanyController {
 					if(list==null){
 						list=new ArrayList<Company>();
 					}
+					
 					if(myUtils.chkCompanyList(list,com)==0){
 					list.add(com);
 					session.setAttribute("SourceList", list);
@@ -162,5 +167,41 @@ public class CompanyController {
 		}
 		
 		
+		@RequestMapping("/addTargetList")
+	    @ResponseBody
+	    public  void  addTargetList(HttpServletRequest request,HttpSession session,HttpServletResponse response)  {
+			String para=request.getParameter("myname_new");
+			int e=0;
+			ModelAndView modelAndView=new ModelAndView();
+			modelAndView.setViewName("/index.jsp");
+			if(para!=null){
+			e=para.indexOf("-");
+			}
+			if( e>0){
+				String comid=para.substring(0,e);
+		
+				Company com=customerService.findCompanyBycomID(comid);
+				if(com!=null){
+					
+					
+					List<Company> list=new ArrayList<Company>();
+					
+					
+					if(myUtils.chkCompanyList(list,com)==0){
+					list.add(com);
+					session.setAttribute("TargetList", list);
+					}
+				}
+			}
+			
+			try {
+				response.sendRedirect("index.jsp");
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+				
+			}
+			
+		}
 
 }

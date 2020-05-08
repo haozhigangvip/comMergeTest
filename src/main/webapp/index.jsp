@@ -12,16 +12,11 @@
 <title>客户列表-BootCRM</title>
 <!-- Bootstrap Core CSS -->
 <link href="<%=basePath%>css/bootstrap.min.css" rel="stylesheet">
-<!-- MetisMenu CSS -->
-<link href="<%=basePath%>css/metisMenu.min.css" rel="stylesheet">
-<!-- DataTables CSS -->
-<link href="<%=basePath%>css/dataTables.bootstrap.css" rel="stylesheet">
+
 
 <!-- Custom CSS -->
 <link href="<%=basePath%>css/sb-admin-2.css" rel="stylesheet">
 <!-- Custom Fonts -->
-<link href="<%=basePath%>css/font-awesome.min.css" rel="stylesheet" type="text/css">
-<link href="<%=basePath%>css/boot-crm.css" rel="stylesheet" type="text/css">
 <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 
     <style type="text/css">
@@ -90,7 +85,7 @@
 						</form>	
 				</div>
 			</div>
-			
+	
 			 <div class="col px-md-5">
 			<div class="row">
 				<div class="col-lg-12">
@@ -110,11 +105,11 @@
 								<c:forEach items="${sessionScope.SourceList}" var="row">
 								
 									<tr>
-										<td>${row.comID}</td>
-										<td>${row.companyname}</td>
+										<td>${row.comID.trim()}</td>
+										<td>${row.companyname.trim()}</td>
 										<td>
 											
-											<button  class="btn btn-danger btn-xs" onclick="removeSession('${row.comID}')">移除</button>
+											<button  class="btn btn-danger btn-xs" onclick="removeSession('${row.comID}','SourceList')">移除</button>
 										
 						
 										</td>
@@ -128,23 +123,75 @@
 						</div>
 						<!-- /.panel-body -->
 					</div>
+					
+					
+					
+					
 					<!-- /.panel -->
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
 				</div>
 				<!-- /.col-lg-12 -->
 			</div>
 		</div>
+		
+		<!-- 合并新公司                   -->
+					<div class="panel panel-default">
+				<div class="panel-body">
+						<form class="form-inline" action="${pageContext.request.contextPath }/addTargetList.action" method="post">
+							<div class="form-group">
+								<label for="customerName">公司名称</label> 
+								<input id="search_kw_new" type="text" name="myname_new" class="form-control ui-com"  placeholder="请输入需要合并的公司名称"  value="${custName }">
+							</div>
+							<button type="submit" class="btn btn-primary">加入</button>
+						</form>	
+				</div>
+			</div>
+	
+			 <div class="col px-md-5">
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="panel panel-default">
+						<div class="panel-heading">合并成的公司</div>
+						<!-- /.panel-heading -->
+						<table class="table table-bordered table-striped">
+							<thead>
+								<tr>
+									<th>comID</th>
+									<th>公司名称</th>
+									
+								</tr>
+							</thead>
+							<tbody>
+							
+								<c:forEach items="${sessionScope.TargetList}" var="row">
+								
+									<tr>
+										<td>${row.comID}</td>
+										<td>${row.companyname}</td>
+										<td>
+											
+											<button  class="btn btn-danger btn-xs" onclick="removeSession('${row.comID}','TargetList')">移除</button>
+										
+						
+										</td>
+									</tr>
+								</c:forEach>
+							</tbody>
+						</table>
+						
+						
+						<!-- /.panel-body -->
+					</div>
+					
+					
+					
+					
+					<!-- /.panel -->
+				</div>
+				<!-- /.col-lg-12 -->
+			</div>
+		</div>
+		
+		
 		</div>
 		</div>
 		
@@ -179,14 +226,13 @@
 	
    	
 
-</script>
 
 <script type="text/javascript">
-function removeSession(com){
+function removeSession(com,session){
 	var httpRequest = new XMLHttpRequest();//第一步：创建需要的对象
 	httpRequest.open('POST', '${pageContext.request.contextPath }/removeSourceList.action', true); //第二步：打开连接
 	httpRequest.setRequestHeader("Content-type","application/x-www-form-urlencoded");//设置请求头 注：post方式必须设置请求头（在建立连接后设置请求头）
-	httpRequest.send('comID='+com);//发送请求 将情头体写在send中
+	httpRequest.send('comID='+com+'&session_name='+session);//发送请求 将情头体写在send中
 	location.reload();
 }
 function clearSession(){
@@ -217,17 +263,27 @@ $(document).ready(function () {
            
            
             
-            $('#search_kw').autocomplete({  
+            $('#'+id).autocomplete({  
                 source: result  
             });  
-        }  
+        };  
 
         $('#search_kw').keyup(function(){  
-        	
-            var right_id = "search_kw";  
-            var $url="${pageContext.request.contextPath}/searchCompany.action";
+        	getListCompany("search_kw");
+        });  
+       
+        $('#search_kw_new').keyup(function(){  
+        	getListCompany("search_kw_new");
+        });  
         
-           var skeyword =JSON.stringify({'companyname': $("#search_kw").val().trim()});
+        
+        
+        function getListCompany(right_id){
+
+            
+            var $url="${pageContext.request.contextPath}/searchCompany.action";
+         
+           var skeyword =JSON.stringify({'companyname': $("#"+right_id).val().trim()});
             $.ajax({
             	type: "post",
                 url:  $url,
@@ -236,15 +292,13 @@ $(document).ready(function () {
                 data : skeyword,
                 cache: false,
                 success: function(data) {
-             
+             		
                 	 insertOptions(data['listCompany'], right_id);   
                 	
                     }
 
                 });
-        });  
-        
-        
+        }
     
         $('#test').click(function(){  
         	
