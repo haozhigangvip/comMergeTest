@@ -15,5 +15,7 @@ public interface CompanyService {
 
 	public Company  findCompanyBycomID(String companyID);
 
+	public int MergerCompany(List<Company> oldCompanList, Company newCompany);
+
 	 
 }

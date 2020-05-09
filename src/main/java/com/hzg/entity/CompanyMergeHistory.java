@@ -20,14 +20,14 @@ public class CompanyMergeHistory {
 		@Column(name = "tableName", columnDefinition = "VARCHAR(50)")
 		private String tableName;
 		
-		@Column(name = "tableID")
+		@Column(name = "tableKeyID")
 		private Integer tableID;
 		@Column(name = "CompanyID_Old", columnDefinition = "VARCHAR(50)")
 		private String companyID_Old;
 		@Column(name = "CompanyID_New", columnDefinition = "VARCHAR(50)")
 		private String companyID_New;
 
-		@Column(name = "creatime",updatable = false)
+		@Column(name = "creatime")
 		private Timestamp  creatime;
 
 		public Integer getAutoID() {

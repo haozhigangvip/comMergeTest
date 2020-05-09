@@ -6,6 +6,7 @@ import com.hzg.service.CompanyServiceImpl;
 import com.hzg.utils.myUtils;
 import com.hzg.vo.CompanyConvert;
 import com.hzg.vo.CompanyQueryVo;
+import com.hzg.vo.MergeResult;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -15,6 +16,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -83,7 +85,7 @@ public class CompanyController {
 					result=customerService.ConvertCompany(sourceCompanycomID, targetCompanyID);
 					if(result==1){
 						result=customerService.UpdateCompanyDelTag(sourceCompanycomID, 1);
-					
+						
 					}
 				} 
 			}
@@ -201,6 +203,34 @@ public class CompanyController {
 				e1.printStackTrace();
 				
 			}
+			
+		}
+		
+		@RequestMapping("/mergeCompany")
+	    @ResponseBody
+	    public MergeResult mergeCompany(HttpSession session) throws InterruptedException{
+			List<Company> oldList=(List<Company>)session.getAttribute("SourceList");
+			List<Company> newList=(List<Company>)session.getAttribute("TargetList");
+			String message="合并完成";
+			int code=0;
+			 
+			if(oldList==null||oldList.size()<=0){
+				message="操作失败，请选择待合并公司";
+				code=1;
+			}else if(newList==null || newList.size()<=0){
+				message="操作失败，请选择合并为公司";
+				code=1;
+			}
+			//开始合并
+			customerService.MergerCompany(oldList, newList.get(0));
+			
+			System.out.println(message);
+
+			MergeResult result=new MergeResult();
+			result.setCode(code);
+			result.setMessage(message);
+			System.out.println(result.getMessage());
+			return result;
 			
 		}
 

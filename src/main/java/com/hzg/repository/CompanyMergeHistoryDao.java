@@ -21,5 +21,6 @@ import com.hzg.entity.CompanyMergeHistory;
 public interface CompanyMergeHistoryDao extends JpaRepository<CompanyMergeHistory,Integer>, JpaSpecificationExecutor<CompanyMergeHistory> {
 		@Query(value="From CompanyMergeHistory where CompanyID_Old =?")
 	    public CompanyMergeHistory findCompanyMergeHistoryByComID(String ComID);
+
    
 }

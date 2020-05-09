@@ -35,6 +35,10 @@
 </head>
 
 <body>
+
+
+
+
 <div id="wrapper">
 	<nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
 		<div class="navbar-header">
@@ -82,10 +86,15 @@
 								<input id="search_kw" type="text" name="myname" class="form-control ui-com"  placeholder="请输入需要合并的公司名称"  value="${custName }">
 							</div>
 							<button type="submit" class="btn btn-primary">加入</button>
+							
+											<div>
+					<button type="submit" class="btn btn-primary" id="btn_merge">开始合并</button>
+				</div>
 						</form>	
 				</div>
+
 			</div>
-	
+			
 			 <div class="col px-md-5">
 			<div class="row">
 				<div class="col-lg-12">
@@ -195,7 +204,7 @@
 		</div>
 		</div>
 		
-		
+
 
 
 
@@ -245,6 +254,9 @@ function clearSession(){
 
 </script>
 
+
+
+
 <script type="text/javascript">
 
 
@@ -278,6 +290,7 @@ $(document).ready(function () {
         
         
         
+        
         function getListCompany(right_id){
 
             
@@ -300,24 +313,20 @@ $(document).ready(function () {
                 });
         }
     
-        $('#test').click(function(){  
-        	
-            
-            var $url="${pageContext.request.contextPath}/convertCompany.action";
-            var skeyword=JSON.stringify({'Sourcecompanys':[{'comID':'COM10000006'},{'comID':'COM10000013'}],'targetCompany':{'comID':'COM10000012'}});
-            alert(skeyword);
+        $('#btn_merge').click(function(){  
+        	<!-- $('#loadingModal').modal({backdrop: true, keyboard: false,show:true});-->	
+        	$('#loadingModal').modal({backdrop: "static", keyboard: false});
+            var $url="${pageContext.request.contextPath}/mergeCompany.action";
+			
             $.ajax({
             	type: "post",
                 url:  $url,
                 contentType:"application/json;charset=utf-8",
                 dataType : 'json',
-                data : skeyword,
-
+				data:"",
                 success: function(data) {
-                	
-                	alert(data['Success']);
+                	alert(data['message']);
                     }
-
                 });
         });  
 
