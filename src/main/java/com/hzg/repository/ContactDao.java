@@ -11,6 +11,7 @@ import com.hzg.entity.Company;
 import com.hzg.entity.Contact;
 @Repository
 public interface ContactDao  extends JpaRepository<Contact,Integer>,JpaSpecificationExecutor<Contact>{
-	 @Query(value="From Contact where comID = ?")
+	
+	@Query(value="From Contact where comID = ?")
 	 public List<Contact> findAllByComID(String companyComID);
 }

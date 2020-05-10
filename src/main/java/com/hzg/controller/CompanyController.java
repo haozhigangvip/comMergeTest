@@ -70,31 +70,7 @@ public class CompanyController {
 	        return cv;
 	    } 
 	  	
-		@RequestMapping("/convertCompany")
-	    @ResponseBody
-	    public JSONObject Convert(@RequestBody JSONObject  cc )
-		{
-			Integer result=0;
-			String sourceCompanycomID=null;
-			String targetCompanyID=cc.getJSONObject("targetCompany").getString("comID");
-			JSONArray jan = (JSONArray) cc.get("Sourcecompanys"); 
-			if(jan!=null||jan.size()!=0){ 
-				for(int i=0;i<jan.size();i++){
-					JSONObject jo = JSONObject.fromObject(jan.get(i));
-					sourceCompanycomID=jo.getString("comID");
-					result=customerService.ConvertCompany(sourceCompanycomID, targetCompanyID);
-					if(result==1){
-						result=customerService.UpdateCompanyDelTag(sourceCompanycomID, 1);
-						
-					}
-				} 
-			}
 		
-			
-			
-				return  JSONObject.fromObject("{Success:"+result+"}");
-			
-	  	}
 		
 	
 			
@@ -206,26 +182,36 @@ public class CompanyController {
 			
 		}
 		
-		@RequestMapping("/mergeCompany")
-	    @ResponseBody
-	    public MergeResult mergeCompany(HttpSession session) throws InterruptedException{
+		@RequestMapping(value="/mergeCompany",produces="application/json")
+	    public @ResponseBody MergeResult mergeCompany(HttpSession session) throws InterruptedException{
 			List<Company> oldList=(List<Company>)session.getAttribute("SourceList");
 			List<Company> newList=(List<Company>)session.getAttribute("TargetList");
 			String message="合并完成";
 			int code=0;
 			 
 			if(oldList==null||oldList.size()<=0){
-				message="操作失败，请选择待合并公司";
-				code=1;
+				message="操作失败，请选择待合并源公司";
+				code=2;
+				
 			}else if(newList==null || newList.size()<=0){
-				message="操作失败，请选择合并为公司";
-				code=1;
-			}
+				message="操作失败，请选择合并目标公司";
+				code=2;
+			}else{
 			//开始合并
-			customerService.MergerCompany(oldList, newList.get(0));
-			
-			System.out.println(message);
+			//code=customerService.MergerCompany(oldList, newList.get(0));
 
+			}
+			
+			if(code==1){
+				
+				message="合并失败，请联系管理员";
+			}else if(code==0)
+			{
+				session.setAttribute("SourceList",null);
+				session.setAttribute("TargetList",null);
+			}
+			
+			
 			MergeResult result=new MergeResult();
 			result.setCode(code);
 			result.setMessage(message);

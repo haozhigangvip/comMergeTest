@@ -7,9 +7,6 @@ import com.hzg.entity.Company;
 public interface CompanyService {
 	 public List<Company> findCompanyByLikeNameOrID(String companyNameOrID);
 
-	public int ConvertCompany(String sourceCompanyID, String targetCompanyID);
-
-
 
 	public int UpdateCompanyDelTag(String companyID,int value);
 
