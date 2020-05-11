@@ -61,7 +61,7 @@
 
         </div>
     </nav>
-
+ 	
         <div id="page-wrapper" class="gray-bg">
         <div class="row border-bottom">
         <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
@@ -74,7 +74,7 @@
         </div>
             <div class="row wrapper border-bottom white-bg page-heading">
                 <div class="col-lg-10">
-                    <h2>客户（公司）合并系统</h2>
+                    <h2>合并记录</h2>
                 </div>
             </div>
            
@@ -191,7 +191,7 @@
                 
             </div>
             <div>
-                <strong>Copyright </strong>  © 2015 Target molecule Corp.
+                       <strong>Copyright </strong>  © 2015 Target molecule Corp.
             </div>
         </div>
 

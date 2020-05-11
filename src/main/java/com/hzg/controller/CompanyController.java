@@ -198,7 +198,7 @@ public class CompanyController {
 				code=2;
 			}else{
 			//开始合并
-			//code=customerService.MergerCompany(oldList, newList.get(0));
+			code=customerService.MergerCompany(oldList, newList.get(0));
 
 			}
 			

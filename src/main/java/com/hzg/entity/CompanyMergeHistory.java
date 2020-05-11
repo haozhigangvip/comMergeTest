@@ -1,11 +1,16 @@
 package com.hzg.entity;
 
 import java.sql.Timestamp;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 
@@ -14,22 +19,26 @@ import javax.persistence.Table;
 @Table(name="companyMerge_history")  
 public class CompanyMergeHistory {
 		@Id
-	    @GeneratedValue(strategy = GenerationType.IDENTITY)
-		@Column(name = "AutoID" )
+		@GeneratedValue(strategy=GenerationType.IDENTITY)
+		@Column(name = "AutoID")
 	    private Integer autoID;
+		
+		@Column(name = "TotalID" )
+		private Integer totalID;
+		
 		@Column(name = "tableName", columnDefinition = "VARCHAR(50)")
 		private String tableName;
-		
+			
 		@Column(name = "tableKeyID")
 		private Integer tableID;
-		@Column(name = "CompanyID_Old", columnDefinition = "VARCHAR(50)")
-		private String companyID_Old;
-		@Column(name = "CompanyID_New", columnDefinition = "VARCHAR(50)")
-		private String companyID_New;
-
+		
 		@Column(name = "creatime")
 		private Timestamp  creatime;
-
+		
+		@ManyToOne(targetEntity = CompanyMergeHistory_Total.class,cascade=CascadeType.PERSIST,fetch=FetchType.EAGER)
+	    @JoinColumn(name = "totalID", referencedColumnName = "autoID", insertable = false, updatable = false)
+	    private CompanyMergeHistory_Total comMergeHistory_Total;
+		
 		public Integer getAutoID() {
 			return autoID;
 		}
@@ -54,21 +63,7 @@ public class CompanyMergeHistory {
 			this.tableID = tableID;
 		}
 
-		public String getCompanyID_Old() {
-			return companyID_Old;
-		}
-
-		public void setCompanyID_Old(String companyID_Old) {
-			this.companyID_Old = companyID_Old;
-		}
-
-		public String getCompanyID_New() {
-			return companyID_New;
-		}
-
-		public void setCompanyID_New(String companyID_New) {
-			this.companyID_New = companyID_New;
-		}
+		
 
 		public Timestamp getCreatime() {
 			return creatime;
@@ -77,13 +72,37 @@ public class CompanyMergeHistory {
 		public void setCreatime(Timestamp creatime) {
 			this.creatime = creatime;
 		}
+		
+		
+		
+		public Integer getTotalID() {
+			return totalID;
+		}
+
+		public void setTotalID(Integer totalID) {
+			this.totalID = totalID;
+		}
+
+		public CompanyMergeHistory_Total getComMergeHistory_Total() {
+			return comMergeHistory_Total;
+		}
+
+		public void setComMergeHistory_Total(CompanyMergeHistory_Total comMergeHistory_Total) {
+			this.comMergeHistory_Total = comMergeHistory_Total;
+		}
 
 		@Override
 		public String toString() {
-			return "CompanyMergeHistory [autoID=" + autoID + ", tableName=" + tableName + ", tableID=" + tableID
-					+ ", companyID_Old=" + companyID_Old + ", companyID_New=" + companyID_New + ", creatime=" + creatime
-					+ "]";
+			return "CompanyMergeHistory [autoID=" + autoID + ", totalID=" + totalID + ", tableName=" + tableName
+					+ ", tableID=" + tableID + ", creatime=" + creatime + ", comMergeHistory_Total="
+					+ comMergeHistory_Total + "]";
 		}
+
+
+
+
+
+		
 		
 		
 }
