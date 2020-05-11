@@ -33,9 +33,9 @@ public class CompanyMergeHistory_Total {
 	@Column(name = "CompanyID_Old", columnDefinition = "VARCHAR(50)")
 	private String CompanyID_Old;
 	@Column(name = "creatime")
-	@Generated(GenerationTime.INSERT)
 	private Timestamp  creatime;
-    @OneToMany(targetEntity = CompanyMergeHistory.class, cascade=CascadeType.PERSIST,fetch=FetchType.EAGER)
+	
+    @OneToMany(mappedBy="comMergeHistory_Total", cascade= CascadeType.ALL,fetch = FetchType.EAGER,orphanRemoval=true)
     private Set<CompanyMergeHistory> comMergeHistory = new HashSet<>();
 
 	

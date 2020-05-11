@@ -1,6 +1,7 @@
 package com.hzg.controller;
 
 import com.hzg.entity.Company;
+import com.hzg.entity.CompanyMergeHistory_Total;
 import com.hzg.service.CompanyService;
 import com.hzg.service.CompanyServiceImpl;
 import com.hzg.utils.myUtils;
@@ -218,6 +219,15 @@ public class CompanyController {
 			System.out.println(result.getMessage());
 			return result;
 			
+		}
+		
+		
+		@RequestMapping("/listhistory")
+	   
+	    public  @ResponseBody List<CompanyMergeHistory_Total> listHistory(String serchKey)  {
+	    	
+	    	List<CompanyMergeHistory_Total> list=customerService.getListHistory();
+			return list;
 		}
 
 }

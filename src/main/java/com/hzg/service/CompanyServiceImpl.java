@@ -77,15 +77,14 @@ public class CompanyServiceImpl implements CompanyService{
 			if(Quote_list!=null && Quote_list.size()>0){
 			
 				for (Quote quote : Quote_list) {
-					//try {
+					try {
 						saveHistory("Quote",old_Com_id,new_Comp_id,quote.getAutoID());
 						quote.setComID(new_Comp_id);
-					//	quoteDao.save(quote);
-				//	} catch (Exception e) {
-						// TODO: handle exception
-
-				//		return result;
-					//}
+						quoteDao.save(quote);
+					} catch (Exception e) {
+						
+						throw new RuntimeException();
+					}
 				}
 			}
 			
@@ -95,14 +94,13 @@ public class CompanyServiceImpl implements CompanyService{
 			if(Order_list!=null && Order_list.size()>0){
 				for (Orders orders : Order_list) {
 					try {
-						//saveHistory("Order",old_Com_id,new_Comp_id,orders.getAutoID());
+						saveHistory("Order",old_Com_id,new_Comp_id,orders.getAutoID());
 						orders.setComID(new_Comp_id);
-					//	orderDao.save(orders);
+						orderDao.save(orders);
 					} catch (Exception e) {
 						// TODO: handle exception
 
-						return result;
-
+						throw new RuntimeException();
 					}
 				}
 			}
@@ -112,13 +110,13 @@ public class CompanyServiceImpl implements CompanyService{
 			if(Invoice_list!=null && Invoice_list.size()>0){
 				for (Invoice invoice : Invoice_list) {
 					try {
-					//	saveHistory("Invoice_info",old_Com_id,new_Comp_id,invoice.getAutoID());
+						saveHistory("Invoice_info",old_Com_id,new_Comp_id,invoice.getAutoID());
 						invoice.setComID(new_Comp_id);
-					//	invoiceDao.save(invoice);
+						invoiceDao.save(invoice);
 					} catch (Exception e) {
 						// TODO: handle exception
 
-						return result;
+						throw new RuntimeException();
 
 					}
 				}
@@ -128,13 +126,13 @@ public class CompanyServiceImpl implements CompanyService{
 			if(Contact_list!=null && Contact_list.size()>0){
 				for (Contact contact : Contact_list) {
 					try {
-					//	saveHistory("Contact",old_Com_id,new_Comp_id,contact.getAutoID());
+						saveHistory("Contact",old_Com_id,new_Comp_id,contact.getAutoID());
 						contact.setComID(new_Comp_id);
-					//	contactDao.save(contact);
+						contactDao.save(contact);
 					} catch (Exception e) {
 						// TODO: handle exception
 
-						return result;
+						throw new RuntimeException();
 
 					}
 				}
@@ -144,12 +142,12 @@ public class CompanyServiceImpl implements CompanyService{
 			Company cp=companyDao.findCompanyByComID(old_Com_id);
 			cp.setDelTag(1);
 			try {
-			//	companyDao.save(cp);
+				companyDao.save(cp);
 			} catch (Exception e) {
 				// TODO: handle exception
 
 
-				return result;
+				throw new RuntimeException();
 
 			}
 		}
@@ -171,24 +169,21 @@ public class CompanyServiceImpl implements CompanyService{
 		if(oldComID!=null  & newComID!=null){
 		Timestamp createtime=new Timestamp(System.currentTimeMillis());
 		CompanyMergeHistory_Total comHistory_Total=comMerge_Total.findCompanyMergeHistoryTotalKey(oldComID, newComID);
-		if(comHistory_Total==null){
+		
+		
+		CompanyMergeHistory comHistory=new CompanyMergeHistory();
+		comHistory.setTableID(tableKeyID);
+		comHistory.setTableName(TableName);
+			comHistory.setCreatime(createtime);
+			if(comHistory_Total==null){
  			comHistory_Total=new CompanyMergeHistory_Total();
 			comHistory_Total.setCompanyID_New(newComID);
 			comHistory_Total.setCompanyID_Old(oldComID);
-			comHistory_Total.setCreatime(createtime);
+			comHistory_Total.setCreatime(createtime);	
 		}
-			CompanyMergeHistory comHistory=new CompanyMergeHistory();
-			comHistory.setTableID(tableKeyID);
-			comHistory.setTableName(TableName);
-			comHistory.setComMergeHistory_Total(comHistory_Total);
-			comHistory.setCreatime(createtime);
-			comHistory.setTotalID(comHistory_Total.getAutoID());
-			Set<CompanyMergeHistory> set=comHistory_Total.getComMergeHistory();
-			set.add(comHistory);
-			
-			
-			comHistory.setComMergeHistory_Total(comHistory_Total);
-		
+		comHistory.setComMergeHistory_Total(comHistory_Total);
+		comHistory_Total.getComMergeHistory().add(comHistory);
+
 			System.out.println("-----------------------");
 			System.out.println(comHistory);
 			comMerge_Total.save(comHistory_Total);	
@@ -269,6 +264,12 @@ public class CompanyServiceImpl implements CompanyService{
     	        
     	        return com;
     	    }
+    	 
+    	 	@Override
+    		public List<CompanyMergeHistory_Total> getListHistory(){
+    			return comMerge_Total.getAll();
+    		}
+
     	
 }
  

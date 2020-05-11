@@ -22,10 +22,8 @@ public class CompanyMergeHistory {
 		@GeneratedValue(strategy=GenerationType.IDENTITY)
 		@Column(name = "AutoID")
 	    private Integer autoID;
-		
-		@Column(name = "TotalID" )
-		private Integer totalID;
-		
+		 
+	
 		@Column(name = "tableName", columnDefinition = "VARCHAR(50)")
 		private String tableName;
 			
@@ -35,8 +33,8 @@ public class CompanyMergeHistory {
 		@Column(name = "creatime")
 		private Timestamp  creatime;
 		
-		@ManyToOne(targetEntity = CompanyMergeHistory_Total.class,cascade=CascadeType.PERSIST,fetch=FetchType.EAGER)
-	    @JoinColumn(name = "totalID", referencedColumnName = "autoID", insertable = false, updatable = false)
+		@ManyToOne(targetEntity = CompanyMergeHistory_Total.class) //,cascade=CascadeType.PERSIST,fetch=FetchType.EAGER
+	    @JoinColumn(name = "totalID", referencedColumnName = "autoID")
 	    private CompanyMergeHistory_Total comMergeHistory_Total;
 		
 		public Integer getAutoID() {
@@ -75,14 +73,7 @@ public class CompanyMergeHistory {
 		
 		
 		
-		public Integer getTotalID() {
-			return totalID;
-		}
-
-		public void setTotalID(Integer totalID) {
-			this.totalID = totalID;
-		}
-
+		
 		public CompanyMergeHistory_Total getComMergeHistory_Total() {
 			return comMergeHistory_Total;
 		}
@@ -93,7 +84,7 @@ public class CompanyMergeHistory {
 
 		@Override
 		public String toString() {
-			return "CompanyMergeHistory [autoID=" + autoID + ", totalID=" + totalID + ", tableName=" + tableName
+			return "CompanyMergeHistory [autoID=" + autoID + ", totalID="  + ", tableName=" + tableName
 					+ ", tableID=" + tableID + ", creatime=" + creatime + ", comMergeHistory_Total="
 					+ comMergeHistory_Total + "]";
 		}

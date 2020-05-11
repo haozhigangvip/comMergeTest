@@ -53,7 +53,7 @@
 
                 </li>
                 <li>
-                    <a href="mergeHistory.jsp"><i class="fa fa-diamond"></i> 
+                    <a href="listhistory.jsp"><i class="fa fa-diamond"></i> 
                     <span class="nav-label">合并记录</span></a>
                 </li>
                 
@@ -315,15 +315,17 @@ $(document).ready(function () {
 	                           text: data['message'],
 		                	   type: "error",
 		                	   closeOnConfirm: false
-	                	   }, function () {
-	                		   window.location.reload()
-	                       }); 
+	                	   });
                 	   }
                  	
                     },
                 error:function(e){
-                	alert(e);	
-                }
+                	swal({
+                        title:" " ,
+                        text: e,
+	                	   type: "error",
+	                	   closeOnConfirm: false
+             	   });                 }
                 
                 });
         });  
