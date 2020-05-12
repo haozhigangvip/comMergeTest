@@ -136,13 +136,10 @@
             </div>
         </div>
         <div class="footer">
-            <div class="float-right">
-                 <strong>2.9.2 inspinia</strong>
+           	 <div class="float-right">
+                 <strong>Copyright </strong>  © 2015 Target molecule Corp.            </div>
             </div>
-            <div>
-                <strong>Copyright</strong> inspinia 2.9.2 &copy; 2014-2018
-            </div>
-        </div>
+       
 
         </div>
         </div>
@@ -175,32 +172,43 @@
 <script type="text/javascript">
 jQuery(function ($) {
  var $listurl="${pageContext.request.contextPath}/listhistory.action";
- var key=null
+ var key =JSON.stringify({});
   $(document).ready(function () {
+	  var dt=[];
+	  
+	  
 	 $.ajax({
      	type: "post",
          url:  $listurl,
-         processData: false,
          contentType:"application/json;charset=utf-8",
          data : key,
-         cache: false,
-         success: function(data) {
-        	 va
+         success: function(dg) {
+        	var data=dg['data'];
 
-        	 for(var item in data){
-        		 alert(item[1] );
-        		 var trHTML = "<tr><td class='gradeX'>"+item.creatime+"</td><td  class='center'>"
-        		 +item.CompanyID_Old+"</td> <td  class='center'>"
-        		 +item[0]+"</td><td  class='center'>"
-        		 +item[2]+"</td><td  class='center'>"
-        		 +item[0]+"</td><td  class='center'><button  class='btn btn-danger btn-xs'>恢复</button></td></tr>";
-        	 	$("#listHistory").append(trHTML)}
+			var t = $('#listHistory').DataTable();
+			for(var ii=0,rr=data.length;ii<rr;ii++){    
+				  console.log(data[ii]);
+
+				t.row.add( [
+							data[ii]['creatime'],
+							data[ii]['companyID_Old'],
+							data[ii]['companyName_Old'],
+							data[ii]['companyID_New'],
+							data[ii]['companyName_New'],
+							'<button id="button-'+ii+'" class="btn btn-danger btn-xs"  type="button">恢复</button>'
+							
+				        ] ).draw();
+				
+				
+           		
+        		 }
          	
              }
 
          });
 		
-	  $('.dataTables-example').DataTable({
+	  $('#listHistory').DataTable({
+		  data:dt,
           pageLength: 25,
           responsive: true,
           dom: '<"html5buttons"B>lTfgitp',
@@ -208,16 +216,15 @@ jQuery(function ($) {
    
               {extend: 'print',
                customize: function (win){
-                      $(win.document.body).addClass('white-bg');
-                      $(win.document.body).css('font-size', '10px');
-
-                      $(win.document.body).find('table')
+                      $(win.document.body).addClass('blue-bg');
+                      $(win.document.body).css('font-size', '12px');
+	                      $(win.document.body).find('table')
                               .addClass('compact')
                               .css('font-size', 'inherit');
               }
               }
           ]
-
+         
       });
    
 });  

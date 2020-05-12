@@ -33,7 +33,6 @@
         <mvc:resources location="/js/" mapping="/js/**"/>
         <mvc:resources location="/css/" mapping="/css/**"/>
 
-
         <!-- 配置视图解析器 -->
         <!-- 作用：返回页面时，Controll中不需要写详细的路径名（可不配） -->
         <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">

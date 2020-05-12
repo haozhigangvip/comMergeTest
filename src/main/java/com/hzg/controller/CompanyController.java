@@ -8,6 +8,7 @@ import com.hzg.utils.myUtils;
 import com.hzg.vo.CompanyConvert;
 import com.hzg.vo.CompanyQueryVo;
 import com.hzg.vo.MergeResult;
+import com.hzg.vo.resultList;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -223,11 +224,23 @@ public class CompanyController {
 		
 		
 		@RequestMapping("/listhistory")
-	   
-	    public  @ResponseBody List<CompanyMergeHistory_Total> listHistory(String serchKey)  {
-	    	
-	    	List<CompanyMergeHistory_Total> list=customerService.getListHistory();
-			return list;
+		@ResponseBody
+	    public  resultList listHistory(CompanyMergeHistory_Total key)  {
+	    	int code=0;
+	    	List<CompanyMergeHistory_Total> list=new ArrayList<CompanyMergeHistory_Total>();
+	    	try{
+	    		list=customerService.getListHistory();
+	    	}catch(Exception e)
+	    	{
+	    		code=1;
+	    	}
+	    	resultList result=new resultList();
+	    	result.setData(list);
+	    	result.setCode(code);
+	    	for (CompanyMergeHistory_Total dd: result.getData()) {
+				System.out.println(dd.toString());
+			}
+			return result;
 		}
 
 }

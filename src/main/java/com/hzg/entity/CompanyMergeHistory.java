@@ -82,12 +82,7 @@ public class CompanyMergeHistory {
 			this.comMergeHistory_Total = comMergeHistory_Total;
 		}
 
-		@Override
-		public String toString() {
-			return "CompanyMergeHistory [autoID=" + autoID + ", totalID="  + ", tableName=" + tableName
-					+ ", tableID=" + tableID + ", creatime=" + creatime + ", comMergeHistory_Total="
-					+ comMergeHistory_Total + "]";
-		}
+		
 
 
 

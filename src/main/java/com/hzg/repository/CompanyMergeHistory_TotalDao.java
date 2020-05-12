@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.hzg.entity.CompanyMergeHistory;
 import com.hzg.entity.CompanyMergeHistory_Total;
+import com.hzg.vo.resultList;
 
 
 /**
@@ -24,8 +25,7 @@ public interface CompanyMergeHistory_TotalDao extends JpaRepository<CompanyMerge
 	
 	@Query(value="From CompanyMergeHistory_Total where CompanyID_Old=?1 and CompanyID_New=?2")
     public CompanyMergeHistory_Total findCompanyMergeHistoryTotalKey(String CompanyID_Old,String CompanyID_New);
-	@Query(value="select autoID,CompanyID_New,CompanyID_Old,creatime From CompanyMergeHistory_Total")
-	public List<CompanyMergeHistory_Total>getAll();
+
 	
 }
  

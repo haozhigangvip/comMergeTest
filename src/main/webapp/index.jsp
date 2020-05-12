@@ -188,11 +188,9 @@
             </div>
 	        <div class="footer">
             <div class="float-right">
-                
+                 <strong>Copyright </strong>  © 2015 Target molecule Corp.
             </div>
-            <div>
-                <strong>Copyright </strong>  © 2015 Target molecule Corp.
-            </div>
+        
         </div>
 
         </div>
@@ -281,7 +279,6 @@ $(document).ready(function () {
                 data : skeyword,
                 cache: false,
                 success: function(data) {
-             		
                 	 insertOptions(data['listCompany'], right_id);   
                 	
                     }
