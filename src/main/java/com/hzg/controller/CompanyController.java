@@ -242,5 +242,26 @@ public class CompanyController {
 			}
 			return result;
 		}
+		
+		@RequestMapping("/resumeCompany")
+		@ResponseBody
+		public MergeResult resumeCompany(@RequestBody  CompanyMergeHistory_Total cm_total){
+			int res=1;		
+			String msg="不能空参";
+			MergeResult result=new MergeResult();
+			if(cm_total!=null){
+			int id=cm_total.getAutoID();
+			res=customerService. resumeCompany(id);
+			if( res==0){
+			msg="还原成功";}else
+			{
+				msg="恢复的记录不存在，还原失败";
+			}
+			}
+
+			result.setMessage(msg);
+			result.setCode(res);
+			return result;
+		}
 
 }

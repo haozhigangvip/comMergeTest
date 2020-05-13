@@ -1,0 +1,23 @@
+ $table-row-background: #ffffff !default;
+ $table-row-selected: #b0bed9 !default;
+ 
+.mystrip1 tbody,
+    .display tbody {
+        tr.odd {
+            background-color: shade($table-row-background, 2.35%); // shade by f9
+ 
+            .selected {
+                background-color: shade($table-row-selected, 2.35%);
+            }
+        }
+    }
+.mystrip2 tbody,
+    .display tbody {
+        tr.odd {
+            background-color: shade($table-row-background); // shade by f9
+ 
+            .selected {
+                background-color: shade($table-row-selected);
+            }
+        }
+    }

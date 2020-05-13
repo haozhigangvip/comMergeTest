@@ -138,19 +138,8 @@ public class CompanyServiceImpl implements CompanyService{
 					}
 				}
 			}			
-
-			// 更新CompanyInfo Deltag
-			Company cp=companyDao.findCompanyByComID(old_Com_id);
-			cp.setDelTag(1);
-			try {
-				companyDao.save(cp);
-			} catch (Exception e) {
-				// TODO: handle exception
-
-
-				throw new RuntimeException();
-
-			}
+			//更新CompanyInfo删除标记
+			updaeCompanyinfoDeltag(old_Com_id,1);
 		}
 		
 
@@ -161,7 +150,22 @@ public class CompanyServiceImpl implements CompanyService{
 	}
     
 	
-	
+	//更新CompanyInfo删除标记
+	public void updaeCompanyinfoDeltag(String old_Com_id,int tag){
+		// 更新CompanyInfo Deltag
+					Company cp=companyDao.findCompanyByComID(old_Com_id);
+					System.out.println(old_Com_id);
+					cp.setDelTag(tag);
+					try {
+						companyDao.save(cp);
+					} catch (Exception e) {
+						// TODO: handle exception
+
+
+						throw new RuntimeException();
+
+					}
+	}
 	
 	
 	
@@ -186,9 +190,6 @@ public class CompanyServiceImpl implements CompanyService{
 		}
 		comHistory.setComMergeHistory_Total(comHistory_Total);
 		comHistory_Total.getComMergeHistory().add(comHistory);
-
-			System.out.println("-----------------------");
-			System.out.println(comHistory);
 			comMerge_Total.save(comHistory_Total);	
 		
 		}
@@ -278,7 +279,104 @@ public class CompanyServiceImpl implements CompanyService{
     			
     			return list;
     		}
-
+    		
+    		@Override
+    		@Transactional(rollbackFor=Exception.class)
+    		@Rollback(value=false)
+    		public int resumeCompany(int id){
+    			int res=1;
+    			String CompanyID;
+    			String CompanyID_New;
+    			try{
+    			CompanyMergeHistory_Total  comHistory_total=comMerge_Total.findOne(id);
+    			if( comHistory_total!=null){
+    				CompanyID=comHistory_total.getCompanyID_Old().trim();
+    				CompanyID_New=comHistory_total.getCompanyID_New().trim();
+    				Set<CompanyMergeHistory> set=comHistory_total.getComMergeHistory();
+    				if(set!=null){
+    				int tag=1;
+    				for (CompanyMergeHistory companyMergeHistory : set) {
+    					String tablename=companyMergeHistory.getTableName().trim();
+    					int tid=companyMergeHistory.getTableID();
+    					switch (tablename) {
+						//更新QUOTE表
+    					case "Quote":
+						Quote quote=quoteDao.findOne(tid);
+						if(quote!=null&&quote.getComID().trim().equals(CompanyID_New)){
+							quote.setComID(CompanyID);
+							quoteDao.save(quote);
+						}else{
+							tag=0;
+							break;
+						}
+						break;
+							
+						//更新ORDER表
+    					case "Order":
+    						Orders order=orderDao.findOne(tid);
+    						if(order!=null&&order.getComID().trim().equals(CompanyID_New)){
+    							order.setComID(CompanyID);
+    							orderDao.save(order);
+    						}else{
+    							tag=0;
+    							break;
+    						}	
+    						break;
+						
+						//更新Invoice表
+    					case "Invoice_info":
+    						Invoice invoice=invoiceDao.findOne(tid);
+    						if(invoice!=null&&invoice.getComID().trim().equals(CompanyID_New)){
+    							invoice.setComID(CompanyID);
+    							invoiceDao.save(invoice);
+    						}else{
+    							tag=0;
+    							break;
+    						}
+    						
+    						break;
+						
+						//更新contact表
+    					case "Contact":
+    						Contact contact=contactDao.findOne(tid);
+    						if(contact!=null&&contact.getComID().trim().equals(CompanyID_New)){
+    							contact.setComID(CompanyID);
+    							contactDao.save(contact);
+    						}else{
+    							tag=0;
+    							break;
+    						}
+    						
+    						break;	
+						default:
+						break;
+						}
+					}
+    				//判断各表记录是否缺失，0为缺失
+    				if(tag==0){
+    					res=2;
+        			  
+    			       throw new RuntimeException();
+    				}else{
+    				//更新CompanyInfo删除标记
+					updaeCompanyinfoDeltag(CompanyID,0);
+					//删除历史记录
+					comMerge_Total.delete(comHistory_total);
+					res=0;}
+    				
+    				}
+    			}}catch(Exception e){
+    				System.out.println(e.getMessage()+e.getCause());
+    				  TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+    				  
+    			}finally {
+    				return res;
+				}
+    			
+    			
+    			
+    			
+    		}
     	
 }
  

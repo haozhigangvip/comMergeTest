@@ -12,14 +12,14 @@
 
     <link href="css/bootstrap.min.css" rel="stylesheet">
 	<link href="css/font-awesome.css" rel="stylesheet">
-    <!-- Toastr style -->
-    <link href="css/toastr.min.css" rel="stylesheet">
-	 <!-- Sweet Alert -->
-    <link href="css/sweetalert.css" rel="stylesheet">
-    
+    <link href="css/footable.core.css" rel="stylesheet">
     <link href="css/animate.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="css/jquery-ui.css">
+	
+	  <!-- Toastr style
+    <link href="css/toastr.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="css/jquery-ui.min.css">
+    <link href="css/sweetalert.css" rel="stylesheet"> -->
 </head>
 
 <body>
@@ -48,21 +48,13 @@
                     </div>
                 </li>
                 <li>
-                    <a href="index.jsp"><i class="fa fa-calendar-plus-o"></i> 
-                    <span class="nav-label">客户合并</span> </a>
+                    <a href="index.jsp"><i class="fa fa-th-large"></i> 
+                    <span class="nav-label">客户（公司）合并</span> </a>
 
                 </li>
                 <li>
-                    <a href="listhistory.jsp"><i class="fa fa-list-alt"></i> 
-                    <span class="nav-label">客户合并记录</span></a>
-                </li>
-                <li>
-                    <a href="listhistory.jsp"><i class="fa fa-user-plus"></i> 
-                    <span class="nav-label">联系人合并</span></a>
-                </li>
-                <li>
-                    <a href="listhistory.jsp"><i class="fa fa-address-card"></i> 
-                    <span class="nav-label">联系人合并记录</span></a>
+                    <a href="listhistory.jsp"><i class="fa fa-diamond"></i> 
+                    <span class="nav-label">合并记录</span></a>
                 </li>
                 
             </ul>
@@ -207,19 +199,20 @@
 
 
     <!-- Mainly scripts -->
-    <script src="js/jquery.min.js"></script>
-    <script src="js/jquery-ui.min.js"></script>
+    <script src="js/jquery-3.1.1.min.js"></script>
     <script src="js/popper.min.js"></script>
     <script src="js/bootstrap.js"></script>
     <script src="js/jquery.metisMenu.js"></script>
     <script src="js/jquery.slimscroll.min.js"></script>
-	
+    <script src="js/footable.all.min.js"></script>
     <script src="js/inspinia.js"></script>
     <script src="js/pace.min.js"></script>
-    <!-- jQuery UI -->
     <script src="js/jquery-ui.min.js"></script>
-    <!-- Sweet alert -->
-    <script src="js/sweetalert.min.js"></script>
+    
+    <!--
+    <script src="js/jquery.min.js"></script>
+     Sweet alert 
+    <script src="js/sweetalert.min.js"></script>-->
 <script type="text/javascript">
 function removeSession(com,session){
 	var httpRequest = new XMLHttpRequest();//第一步：创建需要的对象

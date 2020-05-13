@@ -18,5 +18,8 @@ public interface CompanyService {
 
 	public List<CompanyMergeHistory_Total> getListHistory();
 
+
+	public int resumeCompany(int id);
+
 	 
 }
