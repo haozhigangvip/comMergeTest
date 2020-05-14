@@ -46,7 +46,7 @@
 
 						<div class="logo-element">IN+</div>
 					</li>
-					<li><a href="index.jsp"><i class="fa fa-calendar-plus-o"></i>
+						<li><a href="index.jsp"><i class="fa fa-calendar-plus-o"></i>
 							<span class="nav-label">客户合并</span> </a></li>
 					<li><a href="listhistory.jsp"><i class="fa fa-list-alt"></i>
 							<span class="nav-label">客户合并记录</span></a></li>
@@ -54,7 +54,6 @@
 							<span class="nav-label">联系人合并</span> </a></li>
 					<li><a href="listaccounthistory.jsp"><i class="fa fa-address-card"></i>
 							<span class="nav-label">联系人合并记录</span></a></li>
-
 				</ul>
 
 			</div>
@@ -74,7 +73,7 @@
 			</div>
 			<div class="row wrapper border-bottom white-bg page-heading">
 				<div class="col-lg-10">
-					<h2>客户（公司）合并</h2>
+					<h2>联系人合并</h2>
 				</div>
 			</div>
 		
@@ -89,7 +88,7 @@
 								<div class="col-lg-6">
 									<div class="ibox ">
 										<div class="ibox-title">
-											<h5>待合并客户</h5>
+											<h5>待合并联系人</h5>
 										</div>
 
 
@@ -100,9 +99,9 @@
 													<div class="panel-body">
 														<form class="form-inline">
 															<div class="form-group">
-																<label for="customerName">客户名称</label> <input
+																<label for="customerName">联系人名称</label> <input
 																	id="search_kw" type="text" class="form-control ui-com "
-																	placeholder="请输入需要合并的客户名称" style="width: 400px"
+																	placeholder="请输入需要合并联系人名称" style="width: 400px"
 																	value="${custName }">
 															</div>
 															<div class="form-group">
@@ -117,7 +116,7 @@
 													<thead>
 														<tr>
 															<th width="30%">comID</th>
-															<th width="50%">客户名称</th>
+															<th width="50%">联系人名称</th>
 															<th width="20%" align="center">操作</th>
 														</tr>
 													</thead>
@@ -142,7 +141,7 @@
 								<div class="col-lg-6">
 									<div class="iibox ">
 										<div class="ibox-title">
-											<h5>合并后新客户</h5>
+											<h5>合并后新的联系人</h5>
 										</div>
 
 										<div class="ibox-content" style="height: 500px">
@@ -150,9 +149,9 @@
 												<div class="panel-body">
 													<form class="form-inline">
 														<div class="form-group">
-															<label for="customerName">客户名称</label> <input
+															<label for="customerName">联系人名称</label> <input
 																id="search_kw_new" type="text"
-																class="form-control ui-com" placeholder="请输入合并后新客户名称"
+																class="form-control ui-com" placeholder="请输入合并后新的联系人名称"
 																value="${custName }" style="width: 400px">
 														</div>
 														<button type="button" class="btn btn-primary"
@@ -199,6 +198,11 @@
 								</div>
 							</div>
 							</div>
+							<div class="panel-body">
+							<div class="tab-pane" id="tab-2">
+							</div>
+							
+							</div>
 
 						</div>
 
@@ -237,37 +241,6 @@
 
 
 
-
-
-
-
-
-		<script type="text/javascript">
-			function clearSession() {
-				var httpRequest = new XMLHttpRequest();//第一步：创建需要的对象
-				httpRequest
-						.open(
-								'POST',
-								'${pageContext.request.contextPath }/clearSourceList.action',
-								true); //第二步：打开连接
-				httpRequest.setRequestHeader("Content-type",
-						"application/x-www-form-urlencoded");//设置请求头 注：post方式必须设置请求头（在建立连接后设置请求头）
-				httpRequest.send();//发送请求 将情头体写在send中
-				location.reload();
-			}
-			function searchAccount_new() {
-				var httpRequest = new XMLHttpRequest();//第一步：创建需要的对象
-				httpRequest
-						.open(
-								'POST',
-								'${pageContext.request.contextPath }/clearSourceList.action',
-								true); //第二步：打开连接
-				httpRequest.setRequestHeader("Content-type",
-						"application/x-www-form-urlencoded");//设置请求头 注：post方式必须设置请求头（在建立连接后设置请求头）
-				httpRequest.send();//发送请求 将情头体写在send中
-				refreshList("accountList_new");
-			}
-		</script>
 
 
 
@@ -524,7 +497,7 @@
 																			$(
 																					"#accountList_new")
 																					.append(
-																							'<tr><th width="30%">comID</th><th width="50%">客户名称</th><th width="20%" style="text-align:center;">操作</th></tr>');
+																							'<tr><th width="30%">accountID</th><th width="50%">联系人名称</th><th width="20%" style="text-align:center;">操作</th></tr>');
 																			for (var i = 0; i < data.length; i++) {
 																				var trHTML = '<tr ><td>'
 																						+ data[i].comID
@@ -624,10 +597,7 @@
 																							type : "success"
 																						},
 																						function() {
-																							//window.location.reload();
-																							$("table").empty();
-																							$("table").append('<tr><th width="30%">comID</th><th width="50%">客户名称</th><th width="20%" style="text-align:center;">操作</th></tr>');
-																						
+																							window.location.reload();
 																						});
 																			} else {
 																				swal({

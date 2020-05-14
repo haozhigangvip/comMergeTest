@@ -10,19 +10,21 @@
 
     <title>TargetMol 客户合并系统</title>
 
-  
     <link href="css/bootstrap.min.css" rel="stylesheet">
 	<link href="css/font-awesome.css" rel="stylesheet">
-    <link href="css/footable.core.css" rel="stylesheet">
+	  <link href="css/footable.core.css" rel="stylesheet">
+	
+    <!-- Toastr style -->
+    <link href="css/toastr.min.css" rel="stylesheet">
+	 <!-- Sweet Alert -->
+    <link href="css/sweetalert.css" rel="stylesheet">
+    
     <link href="css/animate.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
+	<link href="css/strip.css" rel="stylesheet">
 	
-	  <!-- Toastr style
-    <link href="css/toastr.min.css" rel="stylesheet">
-	<link rel="stylesheet" href="css/jquery-ui.min.css">
-    <link href="css/sweetalert.css" rel="stylesheet"> -->
-	
-	 <style>
+    <link rel="stylesheet" type="text/css" href="css/jquery-ui.css">
+    <link rel="stylesheet" type="text/css" href="css/dataTables.jqueryui.css">	 <style>
          .highlight {
              background-color: skyblue
          }
@@ -31,6 +33,7 @@
 
 <body>
     <style type="text/css">
+    
       .ui-com {
         font-size: 14px;
         max-height: 100px;
@@ -38,14 +41,35 @@
         width: 772px;
         overflow-y: auto;
         /* 防止水平滚动条 */
-        overflow-x: hidden;
+        overflow-x: hidden
       }
+      .listHistory_filter{
+      	width:450px;
+      }
+       
+        th.ui-state-default{
+        	height:60px;
+        	text-align:center;
+        	vertical-align:middle!important;;
+        	font-size: 14px;
+        	background-color: green;
+        	
+        }
+ 		.dataTables_filter{
+                     padding-left:-95px;//上移
+                    }
+        .dataTables_filter>label>input{
+         width:300px;
+        }
+        #listHistory_paginate{
+        	margin-top: 10px
+        }
     </style>  
 
 
     <div id="wrapper">
 
-    <nav class="navbar-default navbar-static-side" role="navigation">
+    <nav class="navbar-default navbar-static-side" role="navigation" >
         <div class="sidebar-collapse">
             <ul class="nav metismenu" id="side-menu">
                 <li class="nav-header">
@@ -54,17 +78,15 @@
                         IN+
                     </div>
                 </li>
-                <li>
-                    <a href="index.jsp"><i class="fa fa-th-large"></i> 
-                    <span class="nav-label">客户（公司）合并</span> </a>
-
-                </li>
-                <li>
-                    <a href="listhistory.jsp"><i class="fa fa-diamond"></i> 
-                    <span class="nav-label">合并记录</span></a>
-                </li>
-                
-            </ul>
+               		<li><a href="index.jsp"><i class="fa fa-calendar-plus-o"></i>
+							<span class="nav-label">客户合并</span> </a></li>
+					<li><a href="listhistory.jsp"><i class="fa fa-list-alt"></i>
+							<span class="nav-label">客户合并记录</span></a></li>
+					<li><a href="accountMerge.jsp"><i class="fa fa-user-plus"></i>
+							<span class="nav-label">联系人合并</span> </a></li>
+					<li><a href="listaccounthistory.jsp"><i class="fa fa-address-card"></i>
+							<span class="nav-label">联系人合并记录</span></a></li>
+               </ul>
 
         </div>
     </nav>
@@ -82,7 +104,7 @@
       
                        <div class="row wrapper border-bottom white-bg page-heading">
                 <div class="col-lg-10">
-                    <h2>合并历史记录</h2>
+                    <h2>联系人合并历史记录</h2>
                     <ol class="breadcrumb">
                       
                     </ol>
@@ -91,63 +113,57 @@
 
                 </div>
             </div>
-         <div class="row">
+        <div class="wrapper wrapper-content animated fadeInRight">
+            <div class="row">
                 <div class="col-lg-12">
-                    <div class="ibox ">
-                        <div class="ibox-title">
-                            <h5>简单Foo表格与分页,排序和过滤</h5>
-
-                            <div class="ibox-tools">
-                                <a class="collapse-link">
-                                    <i class="fa fa-chevron-up"></i>
-                                </a>
-                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                                    <i class="fa fa-wrench"></i>
-                                </a>
-                                <ul class="dropdown-menu dropdown-user">
-                                    <li><a href="#" class="dropdown-item">选项 1</a>
-                                    </li>
-                                    <li><a href="#" class="dropdown-item">选项 2</a>
-                                    </li>
-                                </ul>
-                                <a class="close-link">
-                                    <i class="fa fa-times"></i>
-                                </a>
-                            </div>
+                <div class="ibox ">
+                    <div class="ibox-title">
+                        
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                <i class="fa fa-wrench"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-user">
+                                <li><a href="#" class="dropdown-item">选项 1</a>
+                                </li>
+                                <li><a href="#" class="dropdown-item">选项 2</a>
+                                </li>
+                            </ul>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
                         </div>
-                        <div class="ibox-content">
-                            <input type="text" class="form-control form-control-sm m-b-xs" id="filter"
-                                   placeholder="搜索表">
+                    </div>
+                    <div class="ibox-content">
 
-                            <table class="footable table table-stripped" data-page-size="8" data-filter=#filter id="listHistory">
-                                <thead>
-                                <tr>
-			                        <th width=12% class="center">合并时间</th>
-			                        <th width=14% class="center">原客户（公司）ID</th>
-			                        <th width=27% class="center">原客户（公司）名称</th>
-			                        <th width=14% class="center">合并后客户（公司）ID</th>
-			                        <th width=27% class="center">合并后客户（公司）名称</th>
-			                        <th width=6%  class="center">操作</th>
-                   	            </tr>
-                                </thead>
-                                <tbody>
-                               
-              
-                                </tbody>
-                                <tfoot>
-                                <tr>
-                                    <td colspan="5">
-                                        <ul class="pagination float-right"></ul>
-                                    </td>
-                                </tr>
-                                </tfoot>
-                            </table>
+                    <div class="table-responsive">
+                    <table class="table table-striped table-bordered table-hover table-border dataTables-example" id="listHistory" >
+                    <thead>
+                    <tr>
+                        <th width=12% class="center">合并时间</th>
+                        <th width=14% class="center">原联系人ID</th>
+                        <th width=27% class="center">原联系人名称</th>
+                        <th width=14% class="center">合并后联系人ID</th>
+                        <th width=27% class="center">合并后联系人名称</th>
+                        <th width=6%  class="center">操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+ 
+                    
+                    </tbody>
+                   
+                    </table>
                         </div>
+
                     </div>
                 </div>
             </div>
-                
-        
+            </div>
+        </div>
         <div class="footer">
            	 <div class="float-right">
                  <strong>Copyright </strong>  © 2015 Target molecule Corp.            </div>
@@ -160,21 +176,25 @@
 
 
     <!-- Mainly scripts -->
-    <script src="js/jquery-3.1.1.min.js"></script>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/jquery-ui.min.js"></script>
     <script src="js/popper.min.js"></script>
     <script src="js/bootstrap.js"></script>
     <script src="js/jquery.metisMenu.js"></script>
     <script src="js/jquery.slimscroll.min.js"></script>
-    <script src="js/footable.all.min.js"></script>
+	
     <script src="js/inspinia.js"></script>
     <script src="js/pace.min.js"></script>
+    <!-- jQuery UI -->
     <script src="js/jquery-ui.min.js"></script>
-    
-    <!--
-    <script src="js/jquery.min.js"></script>
-     Sweet alert 
-    <script src="js/sweetalert.min.js"></script>-->
+    <!-- Sweet alert -->
+    <script src="js/sweetalert.min.js"></script>
+    <script src="js/jquery.metisMenu.js"></script>
+    <script src="js/jquery.slimscroll.min.js"></script>
 
+    <script src="js/highlight1.js"></script>
+    <script type="text/javascript" language="javascript" src="http://cdn.datatables.net/1.10-dev/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" language="javascript" src="http://cdn.datatables.net/plug-ins/28e7751dbec/integration/jqueryui/dataTables.jqueryui.js"></script>
 
 
 
@@ -183,6 +203,7 @@
 jQuery(function ($) {
  var $listurl="${pageContext.request.contextPath}/listhistory.action";
  var key =JSON.stringify({});
+ 
   $(document).ready(function () {
 	  var dt=[];
 	  var t ;
@@ -218,6 +239,7 @@ jQuery(function ($) {
          });
 	 
 	 var table= $('#listHistory').DataTable({
+		  bDeferRender:false,
 		  data:dt,
           pageLength: 25,
           responsive: false,
@@ -226,6 +248,33 @@ jQuery(function ($) {
           bLengthChange: true,
           bInfo: false,
           bFilter: true,
+          stripeClasses: [ 'mystrip2', 'mystrip1'],
+          language: {
+              "sProcessing": "处理中...",
+              "sLengthMenu": "每页 _MENU_ 条记录",
+              "sZeroRecords": "没有匹配结果",
+              "sInfo": "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+              "sInfoEmpty": "显示第 0 至 0 项结果，共 0 项",
+              "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+              "sInfoPostFix": "",
+              "sSearch": "搜索:",
+              "sUrl": "",
+              "sEmptyTable": "表中数据为空",
+              "sLoadingRecords": "载入中...",
+              "sInfoThousands": ",",
+              "oPaginate": {
+                  "sFirst": "首页",
+                  "sPrevious": "上页",
+                  "sNext": "下页",
+                  "sLast": "末页"
+              },
+              "oAria": {
+                  "sSortAscending": ": 以升序排列此列",
+                  "sSortDescending": ": 以降序排列此列"
+              }
+              
+
+          },
           buttons: [
    
               {extend: 'print',
@@ -290,17 +339,7 @@ function  resumeCompany(id,name){
 
 }
 </script>
-<!-- Page-Level Scripts -->
-    <script>
-        $(document).ready(function() {
 
-            $('#listHistory').footable({
-            	
-            });
-        
-        });
-
-    </script>
 </body>
 
 </html>

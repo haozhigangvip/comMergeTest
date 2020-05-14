@@ -44,7 +44,7 @@ import javax.persistence.criteria.Root;
 
 @Service
 @ContextConfiguration(locations = "classpath:ApplicationContext-dao.xml")
-public class CompanyServiceImpl implements CompanyService{
+public class AccountServiceImpl implements AccountService{
     @Autowired
     private CompanyDao companyDao;
     @Autowired
@@ -137,13 +137,15 @@ public class CompanyServiceImpl implements CompanyService{
 
 					}
 				}
-			}			
+			}
+			
 			//更新CompanyInfo删除标记
 			
 			Company cp=updateCompanyinfoDeltag(old_Com_id,1);
 			System.out.println("==============================");
 			System.out.println(cp.getAutoID());
 			saveHistory("CompanyInfo",old_Com_id,old_Com_name,new_Comp_id,new_Comp_name,cp.getAutoID());
+
 		}
 		
 
@@ -162,6 +164,7 @@ public class CompanyServiceImpl implements CompanyService{
 					cp.setDelTag(tag);
 					try {
 						companyDao.save(cp);
+						
 					} catch (Exception e) {
 						// TODO: handle exception
 
@@ -352,8 +355,11 @@ public class CompanyServiceImpl implements CompanyService{
     							tag=0;
     							break;
     						}
+    						
     						break;	
- 						
+    					case "CompanyInfo":
+    						//更新CompanyInfo删除标记
+    						updateCompanyinfoDeltag(CompanyID,0);
 						}
 					}
     				//判断各表记录是否缺失，0为缺失
@@ -362,9 +368,8 @@ public class CompanyServiceImpl implements CompanyService{
         			  
     			       throw new RuntimeException();
     				}else{
-    				//更新CompanyInfo删除标记
-					updateCompanyinfoDeltag(CompanyID,0);
-					//删除历史记录
+    				
+				
 					comMerge_Total.delete(comHistory_total);
 					res=0;}
     				

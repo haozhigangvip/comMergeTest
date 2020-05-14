@@ -78,14 +78,14 @@
                         IN+
                     </div>
                 </li>
-                <li>
-                    <a href="index.jsp"><i class="fa fa-calendar-plus-o"></i> 
-                    <span class="nav-label">客户/联系人合并</span> </a>
-
-                </li>
-                <li>
-                    <a href="listhistory.jsp"><i class="fa fa-list-alt"></i> 
-                    <span class="nav-label">合并记录</span></a>
+                	<li><a href="index.jsp"><i class="fa fa-calendar-plus-o"></i>
+							<span class="nav-label">客户合并</span> </a></li>
+					<li><a href="listhistory.jsp"><i class="fa fa-list-alt"></i>
+							<span class="nav-label">客户合并记录</span></a></li>
+					<li><a href="accountMerge.jsp"><i class="fa fa-user-plus"></i>
+							<span class="nav-label">联系人合并</span> </a></li>
+					<li><a href="listaccounthistory.jsp"><i class="fa fa-address-card"></i>
+							<span class="nav-label">联系人合并记录</span></a></li>
                 </li>
                </ul>
 
@@ -105,7 +105,7 @@
       
                        <div class="row wrapper border-bottom white-bg page-heading">
                 <div class="col-lg-10">
-                    <h2>合并历史记录</h2>
+                    <h2>客户（公司）合并历史记录</h2>
                     <ol class="breadcrumb">
                       
                     </ol>
@@ -202,42 +202,12 @@
 
 <script type="text/javascript">
 jQuery(function ($) {
- var $listurl="${pageContext.request.contextPath}/listhistory.action";
- var key =JSON.stringify({});
  
   $(document).ready(function () {
 	  var dt=[];
 	  var t ;
-	  
-	 $.ajax({
-     	type: "post",
-         url:  $listurl,
-         contentType:"application/json;charset=utf-8",
-         data : key,
-         success: function(dg) {
-        	var data=dg['data'];
-
-			 t = $('#listHistory').DataTable();
-			for(var ii=0,rr=data.length;ii<rr;ii++){    
-				  console.log(data[ii]);
-
-				t.row.add( [
-							data[ii]['creatime'],
-							data[ii]['companyID_Old'],
-							data[ii]['companyName_Old'],
-							data[ii]['companyID_New'],
-							data[ii]['companyName_New'],
-							'<button  class="btn btn-danger btn-xs center"  type="button" onclick=" resumeCompany('+data[ii]['autoID']+')">还原</button>'
-							
-				        ] ).draw();
-				
-				
-           		
-        		 }
-         	
-             }
-
-         });
+	  refreshCompanyTable();
+	
 	 
 	 var table= $('#listHistory').DataTable({
 		  bDeferRender:false,
@@ -299,7 +269,41 @@ jQuery(function ($) {
    	
 });  
 });
+function refreshCompanyTable(){
+	 var $listurl="${pageContext.request.contextPath}/listhistory.action";
+	 var key =JSON.stringify({});
 
+	 $.ajax({
+	     	type: "post",
+	         url:  $listurl,
+	         contentType:"application/json;charset=utf-8",
+	         data : key,
+	         success: function(dg) {
+	        	var data=dg['data'];
+
+				 t = $('#listHistory').DataTable();
+				 $('#listHistory').dataTable().fnClearTable(this); 				 
+				for(var ii=0,rr=data.length;ii<rr;ii++){    
+					  console.log(data[ii]);
+					  t.row.add( [
+								data[ii]['creatime'],
+								data[ii]['companyID_Old'],
+								data[ii]['companyName_Old'],
+								data[ii]['companyID_New'],
+								data[ii]['companyName_New'],
+								'<button  class="btn btn-danger btn-xs center"  type="button" onclick=" resumeCompany('+data[ii]['autoID']+')">还原</button>'
+								
+					        ] ).draw();
+			
+	           		
+	        		 }
+				
+	         	
+	             }
+
+	         });
+	
+}
 function  resumeCompany(id,name){
 	 var $url="${pageContext.request.contextPath}/resumeCompany.action";
 	 var $key=JSON.stringify({"autoID":id});
@@ -316,7 +320,8 @@ function  resumeCompany(id,name){
                          text: data['message'],
 	                	   type: "success"
               	   }, function () {
-              		   window.location.reload()
+              		   //window.location.reload()
+              		 refreshCompanyTable();
                      });
           	   }else{
           		   swal({

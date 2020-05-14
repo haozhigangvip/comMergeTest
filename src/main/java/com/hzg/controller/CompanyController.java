@@ -46,7 +46,7 @@ public class CompanyController {
 	
 	  	@RequestMapping("/searchCompany")
 	    @ResponseBody
-	    public QueryVo json(@RequestBody  Company company ,HttpSession session)  {
+	    public QueryVo getCompany(@RequestBody  Company company ,HttpSession session)  {
 	  		
 	        String cname=company.getCompanyname().trim();
 	        System.out.println(company.toString());
@@ -83,7 +83,7 @@ public class CompanyController {
 	  	
 		@RequestMapping("/searchAccount")
 	    @ResponseBody
-	    public  QueryVo Account(@RequestBody  Company company ,HttpSession session)  {
+	    public  QueryVo getAccount(@RequestBody  Company company ,HttpSession session)  {
 	  		
 	        String cname=company.getCompanyname().trim();
 	        List<Company> ls=new ArrayList<Company>();
