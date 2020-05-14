@@ -4,7 +4,7 @@ import com.hzg.entity.Company;
 
 import java.util.List;
 
-public class CompanyQueryVo {
+public class QueryVo {
     private int success;
     private List<Company> listCompany;
     public int getSuccess() {
