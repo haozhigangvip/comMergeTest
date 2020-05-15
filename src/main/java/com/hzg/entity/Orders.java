@@ -19,9 +19,23 @@ public class Orders {
 	@Column(name="companyID")
 	private String comID;
 	
+	@Column(name="scontactID")
+	private String contactID;
 	
 	public Integer getAutoID() {
 		return autoID;
+	}
+
+
+
+	public String getContactID() {
+		return contactID;
+	}
+
+
+
+	public void setContactID(String contactID) {
+		this.contactID = contactID;
 	}
 
 

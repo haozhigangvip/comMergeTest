@@ -16,6 +16,17 @@ public class Quote {
 	private Integer autoID;
 	@Column(name="qtcompanyID")
 	private String comID;
+	@Column(name="qtcontactID")
+	private String contactID;
+	
+	
+	
+	public String getContactID() {
+		return contactID;
+	}
+	public void setContactID(String contactID) {
+		this.contactID = contactID;
+	}
 	public Integer getAutoID() {
 		return autoID;
 	}

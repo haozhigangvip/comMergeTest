@@ -4,14 +4,15 @@ import java.util.List;
 
 import com.hzg.entity.Company;
 import com.hzg.entity.CompanyMergeHistory_Total;
+import com.hzg.entity.Contact;
 
-public interface AccountService {
-	 public List<Company> findCompanyByLikeNameOrID(String companyNameOrID);
+public interface ContactService {
+	  public List<Contact> findContactByLikeNameOrID(String ContactNameOrID);
 
 
-	public int UpdateCompanyDelTag(String companyID,int value);
+	public int UpdateContDelTag(String contID,int value);
 
-	public Company  findCompanyBycomID(String companyID);
+	public Contact  findContactBycontID(String contID);
 
 	public int MergerCompany(List<Company> oldCompanList, Company newCompany);
 
@@ -20,6 +21,8 @@ public interface AccountService {
 
 
 	public int resumeCompany(int id);
+
+
 
 	 
 }

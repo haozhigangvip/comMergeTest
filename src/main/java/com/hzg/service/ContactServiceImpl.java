@@ -44,7 +44,7 @@ import javax.persistence.criteria.Root;
 
 @Service
 @ContextConfiguration(locations = "classpath:ApplicationContext-dao.xml")
-public class AccountServiceImpl implements AccountService{
+public class ContactServiceImpl implements ContactService{
     @Autowired
     private CompanyDao companyDao;
     @Autowired
@@ -137,15 +137,13 @@ public class AccountServiceImpl implements AccountService{
 
 					}
 				}
-			}
-			
+			}			
 			//更新CompanyInfo删除标记
 			
 			Company cp=updateCompanyinfoDeltag(old_Com_id,1);
 			System.out.println("==============================");
 			System.out.println(cp.getAutoID());
 			saveHistory("CompanyInfo",old_Com_id,old_Com_name,new_Comp_id,new_Comp_name,cp.getAutoID());
-
 		}
 		
 
@@ -164,7 +162,6 @@ public class AccountServiceImpl implements AccountService{
 					cp.setDelTag(tag);
 					try {
 						companyDao.save(cp);
-						
 					} catch (Exception e) {
 						// TODO: handle exception
 
@@ -223,34 +220,35 @@ public class AccountServiceImpl implements AccountService{
     
     
     @Override
-    public List<Company> findCompanyByLikeNameOrID(String companyNameOrID){
+    public List<Contact> findContactByLikeNameOrID(String ContactNameOrID){
     	Pageable pg=new PageRequest(0, 25);
-    	Specification<Company> spec=new Specification<Company>() {
+    	Specification<Contact> spec=new Specification<Contact>() {
 
 			@Override
-			public Predicate toPredicate(Root<Company> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-				Path<Object> companyname =root.get("companyname");
-				Path<Object> comID =root.get("comID");
+			public Predicate toPredicate(Root<Contact> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+				Path<Object> Contactname =root.get("name");
+				Path<Object> contID =root.get("contID");
 				Path<Object> deltag =root.get("delTag");
-				Predicate likename= cb.like(companyname.as(String.class), "%"+companyNameOrID+"%");
-				Predicate eqid= cb.like(comID.as(String.class), "%"+companyNameOrID+"%");
+				Predicate likename= cb.like(Contactname.as(String.class), "%"+ContactNameOrID+"%");
+				Predicate eqid= cb.like(contID.as(String.class), "%"+ContactNameOrID+"%");
 				Predicate del= cb.notEqual(deltag.as(Integer.class), 1);
-				Predicate del1= cb.isNull(deltag.as(Integer.class));
-				Predicate or =cb.and(cb.or(likename,eqid),cb.or(del,del1));
-				
+				Predicate dell= cb.isNull(deltag.as(Integer.class));
+				Predicate or =cb.and(cb.or(likename,eqid),cb.or(del,dell));
+				System.out.println(or.getAlias());
 				// TODO Auto-generated method stub
 				return or;
 			}
 		};
-        Page<Company> page=companyDao.findAll(spec,pg);
+	
+        Page<Contact> page=contactDao.findAll(spec,pg);
         
         return page.getContent();
     	}
     
     	@Override
-    	public int UpdateCompanyDelTag(String companyID,int value){
+    	public int UpdateContDelTag(String contID,int value){
     		int result=0;
-    		Company com=companyDao.findCompanyByComID(companyID);
+    		Company com=companyDao.findCompanyByComID(contID);
     		if(com!=null){
     			com.setDelTag(value);
     			try {
@@ -269,13 +267,10 @@ public class AccountServiceImpl implements AccountService{
     	
     	
     	
-    	 @Override
-    	    public Company  findCompanyBycomID(String companyComID){
-    	    	
-    			
-    	        Company com=companyDao.findCompanyByComID(companyComID);
-    	        
-    	        return com;
+    	 	@Override
+    	 	public Contact findContactBycontID(String contID){
+    		 Contact cont=contactDao.findByContID(contID);
+    	      return cont;
     	    }
     	 
     	 	@Override
@@ -355,11 +350,8 @@ public class AccountServiceImpl implements AccountService{
     							tag=0;
     							break;
     						}
-    						
     						break;	
-    					case "CompanyInfo":
-    						//更新CompanyInfo删除标记
-    						updateCompanyinfoDeltag(CompanyID,0);
+ 						
 						}
 					}
     				//判断各表记录是否缺失，0为缺失
@@ -368,8 +360,9 @@ public class AccountServiceImpl implements AccountService{
         			  
     			       throw new RuntimeException();
     				}else{
-    				
-				
+    				//更新CompanyInfo删除标记
+					updateCompanyinfoDeltag(CompanyID,0);
+					//删除历史记录
 					comMerge_Total.delete(comHistory_total);
 					res=0;}
     				

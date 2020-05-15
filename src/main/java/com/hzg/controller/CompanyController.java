@@ -226,28 +226,6 @@ public class CompanyController {
 		
 		
 		
-		@RequestMapping("/addAccountTargetList")
-	    @ResponseBody
-	    public  List<Company>  addAccountTargetList(@RequestBody  Company company, HttpServletRequest request,HttpSession session,HttpServletResponse response)  {
-
-				String comid=company.getComID();
-				System.out.println(comid);
-				List<Company> list=null;
-				Company com=customerService.findCompanyBycomID(comid);
-				if(com!=null){
-					
-					
-					list=new ArrayList<Company>();
-					if(myUtils.chkCompanyList(list,com)==0){
-					list.add(com);
-					session.setAttribute("accountTargetList", list);					
-					}
-					
-				}
-				
-				return list;
-			
-		}
 		
 		@RequestMapping(value="/mergeCompany",produces="application/json")
 	    public @ResponseBody MergeResult mergeCompany(HttpSession session) throws InterruptedException{

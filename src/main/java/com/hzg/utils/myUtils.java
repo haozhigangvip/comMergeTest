@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.hzg.entity.Company;
+import com.hzg.entity.Contact;
 
 public class myUtils {
 public static  int chkCompanyList(List<Company> list,Company CheckCompany){
@@ -16,6 +17,17 @@ public static  int chkCompanyList(List<Company> list,Company CheckCompany){
 		}
 	}
 	return 0;
+}
+public static  int chkContactList(List<Contact> list,Contact CheckContact){
+	for (Contact cont : list) {
+	System.out.println(cont.getContID());
+
+	if(cont.getContID().toString().trim().equals(CheckContact.getContID().toString().trim())){
+
+		return 1;
+	}
+}
+return 0;
 }
 
 public static  List<Company>  chkCompanyList(List<Company> sourcelist,List<Company> targetlist){
@@ -39,5 +51,24 @@ public static  List<Company>  chkCompanyList(List<Company> sourcelist,List<Compa
 	return ls;
 }
 
+public static  List<Contact>  chkContactList(List<Contact> sourcelist,List<Contact> targetlist){
+	List<Contact> ls =new ArrayList<Contact>();
+	
+	int tag;
+	
+	for (Contact source_Contact : sourcelist) {
+		tag=1;
+		for(Contact target_Contact : targetlist){
+				if(source_Contact.getContID().trim().equals(target_Contact.getContID().trim())==true){
+				tag=0;
+			
 
+			}
+		}
+		if (tag==1){
+			ls.add(source_Contact);
+		}
+	}
+	return ls;
+}
 }

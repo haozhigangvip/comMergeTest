@@ -8,6 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 import java.sql.Timestamp;
 
 
@@ -70,10 +72,12 @@ public class Company {
     private String csalesman;
     @Column(name="delTag")
     private Integer delTag;
+  
 
 
+   
 
-    public Integer getDelTag() {
+	public Integer getDelTag() {
 		return delTag;
 	}
 
