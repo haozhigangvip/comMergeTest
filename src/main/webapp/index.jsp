@@ -21,6 +21,8 @@
 <link href="css/animate.css" rel="stylesheet">
 <link href="css/style.css" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="css/jquery-ui.css">
+<!-- Ladda style -->
+<link href="css/ladda-themeless.min.css" rel="stylesheet">
 </head>
 
 <body>
@@ -199,7 +201,7 @@
 										<nav class="navbar navbar-static-top" role="navigation"
 											style="margin-bottom: 0">
 											<div class="navbar-header">
-												<button type="submit" class="btn btn-primary" id="btn_merge">开始合并</button>
+												<button type="button" class="ladda-button ladda-button-demo btn btn-primary"  data-style="zoom-in" id="btn_merge">开始合并</button>
 											</div>
 										</nav>
 
@@ -379,7 +381,9 @@
 		<script src="js/jquery-ui.min.js"></script>
 		<!-- Sweet alert -->
 		<script src="js/sweetalert.min.js"></script>
-
+		<!-- Ladda -->
+	    <script src="js/spin.min.js"></script>
+	    <script src="js/ladda.min.js"></script>
 
 
 
@@ -389,7 +393,7 @@
 				$(document).ready(
 								function() {
 									(function() {
-										var insertOptions = function(data, id) {
+											var insertOptions = function(data, id) {
 											var result = new Array();
 											if (id.indexOf("Contact") >= 0) {
 												for (var ii = 0, rr = data.length; ii < rr; ii++) {
@@ -665,46 +669,59 @@
 										}
 
 						
-										
 										$('#btn_merge').click(function() {
+											var l = Ladda.create(this);
+											
 											var url = "${pageContext.request.contextPath}/mergeCompany.action";
 											var title='<tr><th width="30%">comID</th><th width="50%">客户名称</th><th width="20%" style="text-align:center">操作</th></tr>'
-											merge(url,title,"CompanyList");
+											
+											merge(url,title,"CompanyList",l);
+											return false;
+	
 										});
 										
 										$('#btn_Contact_merge').click(function() {
 											var url = "${pageContext.request.contextPath}/mergeContact.action";
 											var title='<tr><th width="30%">contID</th><th width="50%">联系人名称</th><th width="20%" style="text-align:center">操作</th></tr>'
 											merge(url,title,"Contact");
+											return false;
 										});
 										
-										var merge =function($url,$title,$tab){
+										var merge =function($url,$title,$tab,l){
+											l.start();
 											$('#loadingModal').modal({
 												backdrop : "static",
 												keyboard : false
 												});
+											var btn1 = Ladda.bind('.ladda-button-demo');
+
 										$.ajax({	type : "post",
 											url : $url,
 											contentType : "application/json;charset=utf-8",
 											dataType : 'json',
 											data : "123",
 											success : function(data) {
+												
 												if (data["code"] == 0) {
+													l.stop(); 
 													swal({title : " ",
 														  text : data['message'],
 														  type : "success"},
 														  function() {
+
 																$("table[id*='"+$tab+"']").empty();
 																$("table[id*='"+$tab+"']").append($title);
 															});} else {
+													l.stop(); 
 													swal({
 														title : " ",
 														text : data['message'],
 														type : "error",
 														closeOnConfirm : false});}
 													},
-											error : function(
-													e) {
+											error : function(e) {
+												l.stop(); 
+					
 												swal({
 													title : "",
 													text : e,
@@ -712,7 +729,8 @@
 													closeOnConfirm : false
 												});
 											}
-										});
+										})
+										.always(function() { l.stop(); });
 										}
 									})();
 								});
