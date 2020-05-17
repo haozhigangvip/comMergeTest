@@ -1,11 +1,8 @@
 package com.hzg.entity;
 
 import java.sql.Timestamp;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -16,8 +13,8 @@ import javax.persistence.Table;
 
 
 @Entity     //声明实体类
-@Table(name="CompanyMergeItem")  
-public class CompanyMergeHistory {
+@Table(name="ContactMergeItem")  
+public class ContactMergeItem {
 		@Id
 		@GeneratedValue(strategy=GenerationType.IDENTITY)
 		@Column(name = "AutoID")
@@ -33,10 +30,10 @@ public class CompanyMergeHistory {
 		@Column(name = "creatime")
 		private Timestamp  creatime;
 		
-		@ManyToOne(targetEntity = CompanyMergeHistory_Total.class) //,cascade=CascadeType.PERSIST,fetch=FetchType.EAGER
-	    @JoinColumn(name = "totalID", referencedColumnName = "autoID")
-	    private CompanyMergeHistory_Total comMergeHistory_Total;
-		
+		@ManyToOne(targetEntity = ContactMerge.class) //,cascade=CascadeType.PERSIST,fetch=FetchType.EAGER
+	    @JoinColumn(name = "contMergeID", referencedColumnName = "autoID")
+	    private ContactMerge contactMerge;
+
 		public Integer getAutoID() {
 			return autoID;
 		}
@@ -61,8 +58,6 @@ public class CompanyMergeHistory {
 			this.tableID = tableID;
 		}
 
-		
-
 		public Timestamp getCreatime() {
 			return creatime;
 		}
@@ -70,17 +65,16 @@ public class CompanyMergeHistory {
 		public void setCreatime(Timestamp creatime) {
 			this.creatime = creatime;
 		}
-		
-		
-		
-		
-		public CompanyMergeHistory_Total getComMergeHistory_Total() {
-			return comMergeHistory_Total;
+
+		public ContactMerge getContactMerge() {
+			return contactMerge;
 		}
 
-		public void setComMergeHistory_Total(CompanyMergeHistory_Total comMergeHistory_Total) {
-			this.comMergeHistory_Total = comMergeHistory_Total;
+		public void setContactMerge(ContactMerge contactMerge) {
+			this.contactMerge = contactMerge;
 		}
+	
+		
 
 		
 

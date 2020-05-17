@@ -7,13 +7,11 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 
 import com.hzg.entity.Contact;
+import com.hzg.entity.ContactAddress;
 import com.hzg.entity.Quote;
 
-public interface QuoteDao extends JpaRepository<Quote,Integer>,JpaSpecificationExecutor<Quote> {
-	 @Query(value="From Quote where comID = ?")
-	 public List<Quote> findAllByComID(String companyComID);
-	 
-	 @Query(value="From Quote where contactID = ?")
-	 public List<Quote> findAllByContactID(String contactID);
+public interface ContactAddressDao extends JpaRepository<ContactAddress,Integer>,JpaSpecificationExecutor<ContactAddress> {
+	 @Query(value="From ContactAddress where contID = ?")
+	 public List<ContactAddress> findAllByContactID(String contID);
 
 }

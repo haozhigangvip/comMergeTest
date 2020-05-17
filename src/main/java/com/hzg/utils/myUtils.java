@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.hzg.entity.Company;
 import com.hzg.entity.Contact;
+import com.hzg.vo.contactResult;
 
 public class myUtils {
 public static  int chkCompanyList(List<Company> list,Company CheckCompany){
@@ -71,4 +72,18 @@ public static  List<Contact>  chkContactList(List<Contact> sourcelist,List<Conta
 	}
 	return ls;
 }
+
+public static Contact  arrayTOContact(Object[] obj){
+	System.out.println(obj);
+	System.out.println(obj[0]);
+	Contact ct=new Contact();
+	ct.setAutoID((Integer)obj[0]);
+	ct.setContID((String)obj[1]);
+	ct.setName((String)obj[2]);
+	ct.setComID((String)obj[3]);
+	ct.setCompanyname((String)obj[4]);
+	ct.setDelTag((Integer)obj[5]);
+	return ct;
+}
+
 }

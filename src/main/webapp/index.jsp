@@ -47,13 +47,10 @@
 						<div class="logo-element">IN+</div>
 					</li>
 					<li><a href="index.jsp"><i class="fa fa-calendar-plus-o"></i>
-							<span class="nav-label">客户合并</span> </a></li>
+							<span class="nav-label">客户/联系人合并</span> </a></li>
 					<li><a href="listhistory.jsp"><i class="fa fa-list-alt"></i>
-							<span class="nav-label">客户合并记录</span></a></li>
-					<li><a href="accountMerge.jsp"><i class="fa fa-user-plus"></i>
-							<span class="nav-label">联系人合并</span> </a></li>
-					<li><a href="listaccounthistory.jsp"><i class="fa fa-address-card"></i>
-							<span class="nav-label">联系人合并记录</span></a></li>
+							<span class="nav-label">客户/联系人合并记录</span></a></li>
+
 
 				</ul>
 
@@ -66,7 +63,7 @@
 					style="margin-bottom: 0">
 					<div class="navbar-header">
 						<a class="navbar-minimalize minimalize-styl-2 btn btn-primary "
-							href="#"><i class="fa fa-bars"></i> </a>
+							href="#"><i class="fa fa-exchange"></i> </a>
 
 					</div>
 
@@ -108,7 +105,7 @@
 
 
 										<div class="activity-stream">
-											<div class="ibox-content" style="height: 500px">
+											<div class="ibox-content" style="height: 450px" id="tab1">
 
 												<div class="activity-stream">
 													<div class="panel-body">
@@ -116,7 +113,7 @@
 															<div class="form-group">
 																<label for="customerName">客户名称</label> <input
 																	id="search_kw" type="text" class="form-control ui-com "
-																	placeholder="请输入需要合并的客户名称" style="width: 500px"
+																	placeholder="请输入需要合并的客户名称" style="width: 450px"
 																	value="${custName }">
 															</div>
 															<div class="form-group">
@@ -126,8 +123,7 @@
 														</form>
 													</div>
 												</div>
-												<table class="table table-bordered table-striped"
-													id="oldcompanyList">
+												<table class="table table-bordered table-striped" id="oldCompanyList">
 													<thead>
 														<tr>
 															<th width="30%">comID</th>
@@ -143,7 +139,7 @@
 																<td width="50%">${row.companyname}</td>
 																<td width="20%" align="center">
 																	<button class="btn btn-danger btn-xs"
-																		onclick="removeSession('${row.comID}','oldcompanyList')">移除</button>
+																		onclick="removeSession('${row.comID}','oldCompanyList')">移除</button>
 																</td>
 															</tr>
 														</c:forEach>
@@ -159,7 +155,7 @@
 											<h5>合并后新客户</h5>
 										</div>
 
-										<div class="ibox-content" style="height: 500px">
+										<div class="ibox-content" style="height: 450px" >
 											<div class="activity-stream">
 												<div class="panel-body">
 													<form class="form-inline">
@@ -167,21 +163,20 @@
 															<label for="customerName">客户名称</label> <input
 																id="search_kw_new" type="text"
 																class="form-control ui-com" placeholder="请输入合并后新客户名称"
-																value="${custName }" style="width: 500px">
+																value="${custName }" style="width: 450px">
 														</div>
 														<button type="button" class="btn btn-primary"
 															id="newCompany">加入</button>
 													</form>
 												</div>
 											</div>
-											<div class="activity-stream">
-												<table class="table table-bordered table-striped"
-													id="newCompanyList">
+											<div class="activity-stream" id="tab1-1">
+												<table class="table table-bordered table-striped" id="newCompanyList">
 													<thead>
 														<tr>
 															<th>comID</th>
 															<th>客户名称</th>
-															<th style="text-align: center;">操作</th>
+															<th style="text-align:center">操作</th>
 														</tr>
 													</thead>
 													<tbody>
@@ -237,7 +232,7 @@
 
 
 										<div class="activity-stream">
-											<div class="ibox-content" style="height: 500px">
+											<div class="ibox-content" style="height: 450px" id="tab2" >
 
 												<div class="activity-stream">
 													<div class="panel-body">
@@ -245,7 +240,7 @@
 															<div class="form-group">
 																<label for="ContactName">联系人名称</label> <input
 																	id="search_Contact" type="text" class="form-control ui-com "
-																	placeholder="请输入需要合并的联系人名称" style="width: 500px"
+																	placeholder="请输入需要合并的联系人名称" style="width: 450px"
 																	value="${name }">
 															</div>
 															<div class="form-group">
@@ -259,18 +254,20 @@
 													id="oldContactList">
 													<thead>
 														<tr>
-															<th width="30%">contID</th>
-															<th width="50%">联系人名称</th>
-															<th width="20%" align="center">操作</th>
+															<th width="10%">contID</th>
+															<th width="20%">联系人名称</th>
+															<th width="60%">公司名称</th>
+															<th width="10%" style="text-align:center">操作</th>
 														</tr>
 													</thead>
 													<tbody>
 														<tr></tr>
 														<c:forEach items="${sessionScope.contactSourceList}" var="row">
 															<tr>
-																<td width="30%">${row.contID}</td>
-																<td width="50%">${row.name}</td>
-																<td width="20%" align="center">
+																<td width="10%">${row.contID}</td>
+																<td width="20%">${row.name}</td>
+																<td width="60%">${row.companyname}</td>
+																<td width="10%" align="center">
 																	<button class="btn btn-danger btn-xs"
 																		onclick="removeSession('${row.contID}','oldContactList')">移除</button>
 																</td>
@@ -288,7 +285,7 @@
 											<h5>合并后新联系人</h5>
 										</div>
 
-										<div class="ibox-content" style="height: 500px">
+										<div class="ibox-content" style="height: 450px">
 											<div class="activity-stream">
 												<div class="panel-body">
 													<form class="form-inline">
@@ -296,30 +293,32 @@
 															<label for="contactName">联系人名称</label> <input
 																id="search_Contact_new" type="text"
 																class="form-control ui-com" placeholder="请输入合并后新联系人名称"
-																value="${name }" style="width: 500px">
+																value="${name }" style="width: 450px">
 														</div>
 														<button type="button" class="btn btn-primary"
 															id="newContact">加入</button>
 													</form>
 												</div>
 											</div>
-											<div class="activity-stream">
+											<div class="activity-stream" id="tab2" >
 												<table class="table table-bordered table-striped"
 													id="newContactList">
 													<thead>
 														<tr>
-															<th>contID</th>
-															<th>联系人名称</th>
-															<th style="text-align: center;">操作</th>
+															<th width="10%">contID</th>
+															<th width="20%">联系人名称</th>
+															<th width="60%">公司名称</th>
+															<th width="10%" style="text-align:center">操作</th>
 														</tr>
 													</thead>
 													<tbody>
 														<tr></tr>
 														<c:forEach items="${sessionScope.contactTargetList}" var="row">
 															<tr>
-																<td width="30%">${row.contID}</td>
-																<td width="50%">${row.name}</td>
-																<td width="20%" align="center">
+																<td width="10%">${row.contID}</td>
+																<td width="20%">${row.name}</td>
+																<td width="60%">${row.companyname}</td>
+																<td width="10%" align="center">
 																	<button class="btn btn-danger btn-xs"
 																		onclick="removeSession('${row.contID}','newContactList')">移除</button>
 																</td>
@@ -333,7 +332,7 @@
 										<nav class="navbar navbar-static-top" role="navigation"
 											style="margin-bottom: 0">
 											<div class="navbar-header">
-												<button type="submit" class="btn btn-primary" id="btn_cont_merge">开始合并</button>
+												<button type="submit" class="btn btn-primary" id="btn_Contact_merge">开始合并</button>
 											</div>
 										</nav>
 
@@ -384,66 +383,29 @@
 
 
 
-
-
-
-
-		<script type="text/javascript">
-			function clearSession() {
-				var httpRequest = new XMLHttpRequest();//第一步：创建需要的对象
-				httpRequest
-						.open(
-								'POST',
-								'${pageContext.request.contextPath }/clearSourceList.action',
-								true); //第二步：打开连接
-				httpRequest.setRequestHeader("Content-type",
-						"application/x-www-form-urlencoded");//设置请求头 注：post方式必须设置请求头（在建立连接后设置请求头）
-				httpRequest.send();//发送请求 将情头体写在send中
-				location.reload();
-			}
-			function searchContact_new() {
-				var httpRequest = new XMLHttpRequest();//第一步：创建需要的对象
-				httpRequest
-						.open(
-								'POST',
-								'${pageContext.request.contextPath }/clearSourceList.action',
-								true); //第二步：打开连接
-				httpRequest.setRequestHeader("Content-type",
-						"application/x-www-form-urlencoded");//设置请求头 注：post方式必须设置请求头（在建立连接后设置请求头）
-				httpRequest.send();//发送请求 将情头体写在send中
-				refreshList("contactList_new");
-			}
-		</script>
-
-
-
-
 		<script type="text/javascript">
 			jQuery(function($) {
 
-				$(document)
-						.ready(
+				$(document).ready(
 								function() {
 									(function() {
 										var insertOptions = function(data, id) {
-
 											var result = new Array();
 											if (id.indexOf("Contact") >= 0) {
 												for (var ii = 0, rr = data.length; ii < rr; ii++) {
-													result
-															.push(data[ii].contID
-																	+ "-"
-																	+ data[ii].name);
+													result.push(data[ii].contID +"-" +$.trim(data[ii].name)+ "-"
+																	+ $.trim(data[ii].companyname));
+													console.log(result);
+
+
 												}
 											} else {
 												for (var ii = 0, rr = data.length; ii < rr; ii++) {
-													result
-															.push(data[ii].comID
+													result.push(data[ii].comID
 																	+ "-"
-																	+ data[ii].companyname);
+																	+ $.trim(data[ii].companyname));
 												}
 											}
-											console.log("id:"+id);
 											
 											$('#' + id).autocomplete({
 												source : result
@@ -497,15 +459,11 @@
 												key = 'listContact';
 											} else {
 												$url = "${pageContext.request.contextPath}/searchCompany.action";
-												skeyword = JSON.stringify({
-													'companyname' : $(
-															"#" + right_id)
-															.val().trim()
+												skeyword = JSON.stringify({'companyname' : $("#" + right_id).val().trim()
 												});
 												key = 'listCompany';
 											}
-											$
-													.ajax({
+											$.ajax({
 														type : "post",
 														url : $url,
 														processData : false,
@@ -525,13 +483,15 @@
 											$("#" + tablekey).empty();
 
 											if(tablekey.indexOf('Contact')>0){
-												$("#" + tablekey).append('<tr><th width="30%">contID</th><th width="50%">联系人名称</th><th width="20%" style="text-align:center;">操作</th></tr>');
+												$("#" + tablekey).append('<tr><th width="10%">contID</th><th width="20%">联系人名称</th><th width="60%">公司名称</th><th width="10%" style="text-align:center">操作</th></tr>');
 												if(data!=null){
 													for (var i = 0; i < data.length; i++) {
 														var trHTML = '<tr ><td>'
 																+ data[i].contID
 																+ '</td><td>'
 																+ data[i].name
+																+ '</td><td>'
+																+ data[i].companyname
 																+ '</td><td align="center">'
 																+ '<button class="btn btn-danger btn-xs" onclick="removeSession(&#39;'
 																+ data[i].contID.trim()
@@ -539,9 +499,17 @@
 																+ '</td></tr>';
 														$("#" + tablekey).append(trHTML);
 														}
+													height=$("#" + tablekey)[0].offsetHeight+100;
+													if(height>=415){
+														$("#tab2").height(height);
+													}else if(height<415){
+														$("#tab2").height(415);
+
+													}
+ 
 													}
 											}else{
-												$("#" + tablekey).append('<tr><th width="30%">comID</th><th width="50%">客户名称</th><th width="20%" style="text-align:center;">操作</th></tr>');
+												$("#" + tablekey).append('<tr><th width="30%">comID</th><th width="50%">客户名称</th><th width="20%" style="text-align:center">操作</th></tr>');
 												if(data!=null){
 													for (var i = 0; i < data.length; i++) {
 														var trHTML = '<tr ><td>'
@@ -555,15 +523,21 @@
 																+ '</td></tr>';
 														$("#" + tablekey).append(trHTML);
 														}
+													height=$("#" + tablekey)[0].offsetHeight+100;
+													if(height>=415){
+														$("#tab1").height(height);
+													}else if(height<415){
+														$("#tab1").height(415);
+
+													}
+
 													}
 											}
 											
 
 										}
 
-										$('#oldCompany')
-												.click(
-														function() {
+										$('#oldCompany').click(function() {
 															var $url = "${pageContext.request.contextPath}/addSourceList.action";
 															var key = $('#search_kw').val();
 															key = key.substring(0,key.indexOf("-"));
@@ -575,7 +549,7 @@
 																		dataType : 'json',
 																		data : JSON.stringify({'comID' : key}),
 																		success : function(data) {
-																			refreshCompanyList(data,'oldcompanyList');
+																			refreshCompanyList(data,'oldCompanyList');
 																			$("#search_kw").val("");
 																		}
 																	});
@@ -623,20 +597,14 @@
 																	});
 														});
 
-										$('#search_Contact_New')
-												.click(
+										$('#newContact').click(
 														function() {
 															var $url = "${pageContext.request.contextPath}/addContactTargetList.action";
 															var key = $(
 																	'#search_Contact_new')
 																	.val();
-															key = key
-																	.substring(
-																			0,
-																			key
-																					.indexOf("-"));
-															$
-																	.ajax({
+															key = key.substring(0,key.indexOf("-"));
+															$.ajax({
 																		type : "post",
 																		url : $url,
 																		contentType : "application/json;charset=utf-8",
@@ -645,7 +613,7 @@
 																		success : function(
 																				data) {console.log(data);
 																				refreshCompanyList(data,'newContactList');
-																				$("#search_Contact_New").val("");	
+																				$("#search_Contact_new").val("");
 
 																		}
 																	});
@@ -656,7 +624,7 @@
 											var $url =null
 											var session = "";
 											switch (tablename) {
-											case "oldcompanyList":
+											case "oldCompanyList":
 												$url= "${pageContext.request.contextPath}/removeCompanySession.action";
 												session = "SourceList";
 												break;
@@ -698,71 +666,54 @@
 
 						
 										
-										$('#btn_merge')
-												.click(
-														function() {
-															<!--
-															$('#loadingModal')
-																	.modal(
-																			{
-																				backdrop : true,
-																				keyboard : false,
-																				show : true
-																			});
-															-->
-															$('#loadingModal')
-																	.modal(
-																			{
-																				backdrop : "static",
-																				keyboard : false
-																			});
-															var $url = "${pageContext.request.contextPath}/mergeCompany.action";
-
-															$
-																	.ajax({
-																		type : "post",
-																		url : $url,
-																		contentType : "application/json;charset=utf-8",
-																		dataType : 'json',
-																		data : "123",
-																		success : function(
-																				data) {
-																			if (data["code"] == 0) {
-																				swal(
-																						{
-																							title : " ",
-																							text : data['message'],
-																							type : "success"
-																						},
-																						function() {
-																							//window.location.reload();
-																							$("table").empty();
-																							$("table").append('<tr><th width="30%">comID</th><th width="50%">客户名称</th><th width="20%" style="text-align:center;">操作</th></tr>');
-																						
-																						});
-																			} else {
-																				swal({
-																					title : " ",
-																					text : data['message'],
-																					type : "error",
-																					closeOnConfirm : false
-																				});
-																			}
-
-																		},
-																		error : function(
-																				e) {
-																			swal({
-																				title : " ",
-																				text : e,
-																				type : "error",
-																				closeOnConfirm : false
-																			});
-																		}
-
-																	});
-														});
-
+										$('#btn_merge').click(function() {
+											var url = "${pageContext.request.contextPath}/mergeCompany.action";
+											var title='<tr><th width="30%">comID</th><th width="50%">客户名称</th><th width="20%" style="text-align:center">操作</th></tr>'
+											merge(url,title,"CompanyList");
+										});
+										
+										$('#btn_Contact_merge').click(function() {
+											var url = "${pageContext.request.contextPath}/mergeContact.action";
+											var title='<tr><th width="30%">contID</th><th width="50%">联系人名称</th><th width="20%" style="text-align:center">操作</th></tr>'
+											merge(url,title,"Contact");
+										});
+										
+										var merge =function($url,$title,$tab){
+											$('#loadingModal').modal({
+												backdrop : "static",
+												keyboard : false
+												});
+										$.ajax({	type : "post",
+											url : $url,
+											contentType : "application/json;charset=utf-8",
+											dataType : 'json',
+											data : "123",
+											success : function(data) {
+												if (data["code"] == 0) {
+													swal({title : " ",
+														  text : data['message'],
+														  type : "success"},
+														  function() {
+																$("table[id*='"+$tab+"']").empty();
+																$("table[id*='"+$tab+"']").append($title);
+															});} else {
+													swal({
+														title : " ",
+														text : data['message'],
+														type : "error",
+														closeOnConfirm : false});}
+													},
+											error : function(
+													e) {
+												swal({
+													title : "",
+													text : e,
+													type : "error",
+													closeOnConfirm : false
+												});
+											}
+										});
+										}
 									})();
 								});
 			});

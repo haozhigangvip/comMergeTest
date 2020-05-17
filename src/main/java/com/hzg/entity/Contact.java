@@ -28,13 +28,18 @@ private String name;
 private String email;
 @Column(name="salesman")
 private String salesman;
-@Column(name="delTag" ,updatable = false)
+@Column(name="delTag")
 private Integer delTag;
+@Transient
+private String companyname;
 
 
-
-
-
+public String getCompanyname() {
+	return companyname;
+}
+public void setCompanyname(String companyname) {
+	this.companyname = companyname;
+}
 public Integer getDelTag() {
 	return delTag;
 }

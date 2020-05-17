@@ -24,7 +24,7 @@ import org.hibernate.annotations.GenerationTime;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 @Entity     //声明实体类
-@Table(name="companyMerge_history_total")
+@Table(name="CompanyMerg")
 public class CompanyMergeHistory_Total {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)

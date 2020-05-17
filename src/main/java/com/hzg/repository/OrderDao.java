@@ -9,4 +9,6 @@ import com.hzg.entity.Orders;
 public interface OrderDao  extends JpaRepository<Orders,Integer>,JpaSpecificationExecutor<Orders>{
 	 @Query(value="From Orders where comID=?")
 	 public List<Orders> findAllByComID(String companyComID);
+	 @Query(value="From Orders where contactID=?")
+	 public List<Orders> findAllByContactID(String contactID);
 }

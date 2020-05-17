@@ -43,6 +43,7 @@
                                 <property name="database" value="SQL_SERVER"/>
                                 <!--设置数据库方言：支持的特有语法-->
                                 <property name="databasePlatform" value="org.hibernate.dialect.SQLServer2008Dialect"/>
+                                
                                 <!--设置数据库是否显示sql语句-->
                                 <property name="showSql" value="true"/>
                               

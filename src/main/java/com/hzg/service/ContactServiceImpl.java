@@ -1,37 +1,43 @@
 package com.hzg.service;
 
 import com.hzg.entity.Company;
-import com.hzg.entity.CompanyMergeHistory;
-import com.hzg.entity.CompanyMergeHistory_Total;
-
 import com.hzg.entity.Contact;
-import com.hzg.entity.Invoice;
+import com.hzg.entity.ContactAddress;
+import com.hzg.entity.ContactEmail;
+import com.hzg.entity.ContactMerge;
+import com.hzg.entity.ContactMergeItem;
+import com.hzg.entity.ContactPhone;
 import com.hzg.entity.Orders;
 import com.hzg.entity.Quote;
-import com.hzg.repository.CompanyDao;
-import com.hzg.repository.CompanyMergeHistoryDao;
-import com.hzg.repository.CompanyMergeHistory_TotalDao;
+import com.hzg.repository.ContactAddressDao;
 import com.hzg.repository.ContactDao;
-import com.hzg.repository.InvoiceDao;
+import com.hzg.repository.ContactEmailDao;
+import com.hzg.repository.ContactMergeDao;
+import com.hzg.repository.ContactMergeItemDao;
+import com.hzg.repository.ContactPhoneDao;
 import com.hzg.repository.OrderDao;
 import com.hzg.repository.QuoteDao;
+import com.hzg.utils.myUtils;
+import com.hzg.vo.contactResult;
+import com.hzg.vo.resultContactList;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -45,42 +51,48 @@ import javax.persistence.criteria.Root;
 @Service
 @ContextConfiguration(locations = "classpath:ApplicationContext-dao.xml")
 public class ContactServiceImpl implements ContactService{
-    @Autowired
-    private CompanyDao companyDao;
+    
     @Autowired
     private QuoteDao quoteDao;
     @Autowired
     private OrderDao orderDao;
     @Autowired
-    private InvoiceDao invoiceDao;
+    private ContactPhoneDao contactPhoneDao;
+    @Autowired
+    private ContactAddressDao contactAddressDao;
+    @Autowired
+    private ContactEmailDao contactEmailDao;
+   
     @Autowired
     private ContactDao contactDao;
     @Autowired
-    private CompanyMergeHistory_TotalDao comMerge_Total;
+    private ContactMergeDao contMergeDao;
     @Autowired
-    private CompanyMergeHistoryDao comMerge;
-   
+    private ContactMergeItemDao contMergeItemDao;
+    
     
     
 	@Override
 	@Transactional(rollbackFor=Exception.class)
 	@Rollback(value=false)
 	//如要回滚，需引用 throw new RuntimeException();方法
-	public int MergerCompany(List<Company> oldCompanList,Company newCompany){
+	public int MergerContact(List<Contact> oldContactList,Contact newContact){
 		int result=1;
-		String new_Comp_id=newCompany.getComID();
-		String new_Comp_name=newCompany.getCompanyname();
-		for (Company company : oldCompanList) {
-			String old_Com_id=company.getComID();
-			String old_Com_name=company.getCompanyname();
+		String new_Cont_id=newContact.getContID();
+		
+		for (Contact contact : oldContactList) {
+			String old_Cont_id=contact.getContID();
+			
+
+			
 			// 更新quote表
-			List<Quote> Quote_list=quoteDao.findAllByComID(old_Com_id);
+			List<Quote> Quote_list=quoteDao.findAllByContactID(old_Cont_id);
 			if(Quote_list!=null && Quote_list.size()>0){
 			
 				for (Quote quote : Quote_list) {
 					try {
-						saveHistory("Quote",old_Com_id,old_Com_name,new_Comp_id,new_Comp_name,quote.getAutoID());
-						quote.setComID(new_Comp_id);
+						saveHistory("Quote",contact,newContact,quote.getAutoID());
+						quote.setContactID(new_Cont_id);
 						quoteDao.save(quote);
 					} catch (Exception e) {
 						
@@ -91,12 +103,12 @@ public class ContactServiceImpl implements ContactService{
 			
 			
 			// 更新order表
-			List<Orders> Order_list=orderDao.findAllByComID(old_Com_id);
+			List<Orders> Order_list=orderDao.findAllByContactID(old_Cont_id);
 			if(Order_list!=null && Order_list.size()>0){
 				for (Orders orders : Order_list) {
 					try {
-						saveHistory("Order",old_Com_id,old_Com_name,new_Comp_id,new_Comp_name,orders.getAutoID());
-						orders.setComID(new_Comp_id);
+						saveHistory("Order",contact,newContact,orders.getAutoID());
+						orders.setContactID(new_Cont_id);
 						orderDao.save(orders);
 					} catch (Exception e) {
 						// TODO: handle exception
@@ -106,44 +118,58 @@ public class ContactServiceImpl implements ContactService{
 				}
 			}
 			
-			// 更新Invoice_info表
-			List<Invoice> Invoice_list=invoiceDao.findAllByComID(old_Com_id);
-			if(Invoice_list!=null && Invoice_list.size()>0){
-				for (Invoice invoice : Invoice_list) {
-					try {
-						saveHistory("Invoice_info",old_Com_id,old_Com_name,new_Comp_id,new_Comp_name,invoice.getAutoID());
-						invoice.setComID(new_Comp_id);
-						invoiceDao.save(invoice);
-					} catch (Exception e) {
-						// TODO: handle exception
-
-						throw new RuntimeException();
-
+			// 更新ContactPhone表
+			List<ContactPhone> contPhone_list=contactPhoneDao.findAllByContactID(old_Cont_id);
+				if(contPhone_list!=null && contPhone_list.size()>0){
+					for (ContactPhone contPhone : contPhone_list) {
+						try {
+							saveHistory("ContactPhone",contact,newContact,contPhone.getAutoID());
+							contPhone.setContID(new_Cont_id);
+							contactPhoneDao.save(contPhone);
+						} catch (Exception e) {
+							// TODO: handle exception
+							throw new RuntimeException();
+						}
 					}
 				}
-			}
-			// 更新Contact表
-			List<Contact> Contact_list=contactDao.findAllByComID(old_Com_id);
-			if(Contact_list!=null && Contact_list.size()>0){
-				for (Contact contact : Contact_list) {
-					try {
-						saveHistory("Contact",old_Com_id,old_Com_name,new_Comp_id,new_Comp_name,contact.getAutoID());
-						contact.setComID(new_Comp_id);
-						contactDao.save(contact);
-					} catch (Exception e) {
-						// TODO: handle exception
-
-						throw new RuntimeException();
-
+				
+				// 更新ContactEmail表
+				List<ContactEmail> contEmail_list=contactEmailDao.findAllByContactID(old_Cont_id);
+					if(contEmail_list!=null && contEmail_list.size()>0){
+						for (ContactEmail contEmail : contEmail_list) {
+							try {
+								saveHistory("ContactEmail",contact,newContact,contEmail.getAutoID());
+								contEmail.setContID(new_Cont_id);
+								contactEmailDao.save(contEmail);
+							} catch (Exception e) {
+								// TODO: handle exception
+								throw new RuntimeException();
+							}
+						}
 					}
-				}
-			}			
-			//更新CompanyInfo删除标记
+				
+					// 更新ContactAddress表
+					List<ContactAddress> contAddress_list=contactAddressDao.findAllByContactID(old_Cont_id);
+						if(contAddress_list!=null && contAddress_list.size()>0){
+							for (ContactAddress contAddress : contAddress_list) {
+								try {
+									saveHistory("ContactAddress",contact,newContact,contAddress.getAutoID());
+									contAddress.setContID(new_Cont_id);
+									contactAddressDao.save(contAddress);
+								} catch (Exception e) {
+									// TODO: handle exception
+									throw new RuntimeException();
+								}
+							}
+						}
+
 			
-			Company cp=updateCompanyinfoDeltag(old_Com_id,1);
+			//更新CompanyInfo删除标记
+						 	
+			Contact cont=updateContDelTag(old_Cont_id,1);
 			System.out.println("==============================");
-			System.out.println(cp.getAutoID());
-			saveHistory("CompanyInfo",old_Com_id,old_Com_name,new_Comp_id,new_Comp_name,cp.getAutoID());
+			System.out.println(cont.getAutoID());
+			saveHistory("Contact",contact,newContact,cont.getAutoID());
 		}
 		
 
@@ -154,49 +180,44 @@ public class ContactServiceImpl implements ContactService{
 	}
     
 	
-	//更新CompanyInfo删除标记
-	public Company updateCompanyinfoDeltag(String old_Com_id,int tag){
-		// 更新CompanyInfo Deltag
-					Company cp=companyDao.findCompanyByComID(old_Com_id);
-					System.out.println(old_Com_id);
-					cp.setDelTag(tag);
-					try {
-						companyDao.save(cp);
-					} catch (Exception e) {
-						// TODO: handle exception
-
-
-						throw new RuntimeException();
-
-					}finally {
-						return cp;
-					}
-	}
-	
-	
 	
 	//保存到更新历史记录
-	private void saveHistory(String TableName,String oldComID,String oldComName,String newComID,String newComName,int tableKeyID){
-		if(oldComID!=null  & newComID!=null){
+	private void saveHistory(String TableName,Contact oldContact,Contact newContact,int tableKeyID){
+		String oldContID=oldContact.getContID();
+		String newContID=newContact.getContID();
+		String oldContName=oldContact.getName();
+		String newContName=newContact.getName();
+		String oldComID=oldContact.getComID();
+		String newComID=newContact.getComID();
+		String oldComName=oldContact.getCompanyname();
+		String newComName=newContact.getCompanyname();
+		
+		if(oldContID!=null  & newContID!=null){
 		Timestamp createtime=new Timestamp(System.currentTimeMillis());
-		CompanyMergeHistory_Total comHistory_Total=comMerge_Total.findCompanyMergeHistoryTotalKey(oldComID, newComID);
+		ContactMerge contMerge=contMergeDao.findContactMergeByKey(oldContID, newContID);
 		
 		
-		CompanyMergeHistory comHistory=new CompanyMergeHistory();
-		comHistory.setTableID(tableKeyID);
-		comHistory.setTableName(TableName);
-			comHistory.setCreatime(createtime);
-			if(comHistory_Total==null){
- 			comHistory_Total=new CompanyMergeHistory_Total();
-			comHistory_Total.setCompanyID_New(newComID);
-			comHistory_Total.setCompanyName_New(newComName);
-			comHistory_Total.setCompanyID_Old(oldComID);
-			comHistory_Total.setCompanyName_Old(oldComName);
-			comHistory_Total.setCreatime(createtime);	
-		}
-		comHistory.setComMergeHistory_Total(comHistory_Total);
-		comHistory_Total.getComMergeHistory().add(comHistory);
-			comMerge_Total.save(comHistory_Total);	
+		ContactMergeItem contMergeItem=new ContactMergeItem();
+		contMergeItem.setTableID(tableKeyID);
+		contMergeItem.setTableName(TableName);
+		contMergeItem.setCreatime(createtime);
+			if(contMerge==null){
+				contMerge=new ContactMerge();
+				contMerge.setContactID_New(newContID);
+				contMerge.setContactName_New(newContName);
+				contMerge.setContactID_Old(oldContID);
+				contMerge.setContactName_Old(oldContName);
+				contMerge.setCreatime(createtime);	
+				contMerge.setCompanyID_Old(oldComID);
+				contMerge.setCompanyName_Old(oldComName);
+				contMerge.setCompanyID_New(newComID);
+				contMerge.setCompanyName_New(newComName);
+				
+			}
+			
+			contMergeItem.setContactMerge(contMerge);
+			contMerge.getContactMergeItem().add(contMergeItem);
+			contMergeDao.save(contMerge);	
 		
 		}
 	
@@ -204,16 +225,24 @@ public class ContactServiceImpl implements ContactService{
 		
 	}
 	
+	//更新Contact删除标记
+	@Override
+	public Contact updateContDelTag(String contID,int value){
+		Contact cont=myUtils.arrayTOContact((Object[])contactDao.findByContID(contID)[0]);
+		if(cont!=null){
+			cont.setDelTag(value);
+			try {
+				contactDao.save(cont);
+			} catch (Exception e) {
+				// TODO: handle exception
+				System.out.println(e.getMessage());
+			}
+		}
+		
+		return cont;
+	}
 	
-    private int toHistory(List<Company> oldCompanList,Company newCompany,Object object){
-    	
-    	
-
-    	
-    	
-    	return 0;
-    	
-    }
+    
     
     
     
@@ -245,23 +274,6 @@ public class ContactServiceImpl implements ContactService{
         return page.getContent();
     	}
     
-    	@Override
-    	public int UpdateContDelTag(String contID,int value){
-    		int result=0;
-    		Company com=companyDao.findCompanyByComID(contID);
-    		if(com!=null){
-    			com.setDelTag(value);
-    			try {
-					companyDao.save(com);
-					result=1;
-				} catch (Exception e) {
-					// TODO: handle exception
-					System.out.println(e.getMessage());
-				}
-    		}
-    		
-    		return result;
-    	}
     	
 
     	
@@ -269,45 +281,51 @@ public class ContactServiceImpl implements ContactService{
     	
     	 	@Override
     	 	public Contact findContactBycontID(String contID){
-    		 Contact cont=contactDao.findByContID(contID);
-    	      return cont;
+    		Contact  ct=myUtils.arrayTOContact((Object[])contactDao.findByContID(contID)[0]);
+    	      return ct;
     	    }
+    	 	
     	 
     	 	@Override
-    		public List<CompanyMergeHistory_Total> getListHistory(){
-    			List<CompanyMergeHistory_Total> list=comMerge_Total.findAll();
-    			for (CompanyMergeHistory_Total companyMergeHistory_Total : list) {
-    				companyMergeHistory_Total.setComMergeHistory(null);
+    		public List<ContactMerge> getContactListHistory(){
+    			List<ContactMerge> list=contMergeDao.findAll();
+    			for (ContactMerge cont : list) {
+    				cont.setContactMergeItem(null);
 				}
     			
     			
     			return list;
     		}
+
+
+
+	
     		
     		@Override
     		@Transactional(rollbackFor=Exception.class)
     		@Rollback(value=false)
-    		public int resumeCompany(int id){
+    		public int resumeContact(int id){
     			int res=1;
-    			String CompanyID;
-    			String CompanyID_New;
+    			String ContactID_Old;
+    			String ContactID_New;
     			try{
-    			CompanyMergeHistory_Total  comHistory_total=comMerge_Total.findOne(id);
-    			if( comHistory_total!=null){
-    				CompanyID=comHistory_total.getCompanyID_Old().trim();
-    				CompanyID_New=comHistory_total.getCompanyID_New().trim();
-    				Set<CompanyMergeHistory> set=comHistory_total.getComMergeHistory();
+    			ContactMerge  contactMerge=contMergeDao.findOne(id);
+    			if( contactMerge!=null){
+    				ContactID_Old=contactMerge.getContactID_Old().trim();
+    				ContactID_New=contactMerge.getContactID_New().trim();
+    				Set<ContactMergeItem> set=contactMerge.getContactMergeItem();
     				if(set!=null){
     				int tag=1;
-    				for (CompanyMergeHistory companyMergeHistory : set) {
-    					String tablename=companyMergeHistory.getTableName().trim();
-    					int tid=companyMergeHistory.getTableID();
+    				for (ContactMergeItem contactMergeItem : set) {
+    					String tablename=contactMergeItem.getTableName().trim();
+    					int tid=contactMergeItem.getTableID();
     					switch (tablename) {
 						//更新QUOTE表
+    					
     					case "Quote":
 						Quote quote=quoteDao.findOne(tid);
-						if(quote!=null&&quote.getComID().trim().equals(CompanyID_New)){
-							quote.setComID(CompanyID);
+						if(quote!=null&&quote.getContactID().trim().equals(ContactID_New)){
+							quote.setContactID(ContactID_Old);
 							quoteDao.save(quote);
 						}else{
 							tag=0;
@@ -318,8 +336,8 @@ public class ContactServiceImpl implements ContactService{
 						//更新ORDER表
     					case "Order":
     						Orders order=orderDao.findOne(tid);
-    						if(order!=null&&order.getComID().trim().equals(CompanyID_New)){
-    							order.setComID(CompanyID);
+    						if(order!=null&&order.getContactID().trim().equals(ContactID_New)){
+    							order.setContactID(ContactID_Old);
     							orderDao.save(order);
     						}else{
     							tag=0;
@@ -328,11 +346,11 @@ public class ContactServiceImpl implements ContactService{
     						break;
 						
 						//更新Invoice表
-    					case "Invoice_info":
-    						Invoice invoice=invoiceDao.findOne(tid);
-    						if(invoice!=null&&invoice.getComID().trim().equals(CompanyID_New)){
-    							invoice.setComID(CompanyID);
-    							invoiceDao.save(invoice);
+    					case "ContactPhone":
+    						ContactPhone contactPhone=contactPhoneDao.findOne(tid);
+    						if(contactPhone!=null&&contactPhone.getContID().trim().equals(ContactID_New)){
+    							contactPhone.setContID(ContactID_Old);
+    							contactPhoneDao.save(contactPhone);
     						}else{
     							tag=0;
     							break;
@@ -340,18 +358,37 @@ public class ContactServiceImpl implements ContactService{
     						
     						break;
 						
-						//更新contact表
-    					case "Contact":
-    						Contact contact=contactDao.findOne(tid);
-    						if(contact!=null&&contact.getComID().trim().equals(CompanyID_New)){
-    							contact.setComID(CompanyID);
-    							contactDao.save(contact);
+    						//更新Invoice表
+    					case "ContactEmail":
+    						ContactEmail contactEmail=contactEmailDao.findOne(tid);
+    						if(contactEmail!=null&&contactEmail.getContID().trim().equals(ContactID_New)){
+    							contactEmail.setContID(ContactID_Old);
+    							contactEmailDao.save(contactEmail);
     						}else{
     							tag=0;
     							break;
+    						}    						
+    						break;    						
+
+    					case "ContactAddress":
+    						ContactAddress contactAddress=contactAddressDao.findOne(tid);
+    						if(contactAddress!=null&&contactAddress.getContID().trim().equals(ContactID_New)){
+    							contactAddress.setContID(ContactID_Old);
+    							contactAddressDao.save(contactAddress);
+    						}else{
+    							tag=0;
+    							break;
+    						}    						
+    						break;    						
+
+    						
+						//更新contact表删除标记
+    					case "Contact":
+    						Contact cont=updateContDelTag(ContactID_Old,0);
+    						if(cont==null){
+    							tag=0;
     						}
-    						break;	
- 						
+    						break;
 						}
 					}
     				//判断各表记录是否缺失，0为缺失
@@ -360,10 +397,8 @@ public class ContactServiceImpl implements ContactService{
         			  
     			       throw new RuntimeException();
     				}else{
-    				//更新CompanyInfo删除标记
-					updateCompanyinfoDeltag(CompanyID,0);
-					//删除历史记录
-					comMerge_Total.delete(comHistory_total);
+    				//删除历史记录
+					contMergeDao.delete(contactMerge);
 					res=0;}
     				
     				}
@@ -379,6 +414,31 @@ public class ContactServiceImpl implements ContactService{
     			
     			
     		}
+    		@Override
+    		public List<Contact> testlist(String key){
+    	    	Pageable pg=new PageRequest(0, 25);
+
+    			Page<Object[]> result=contactDao.getByContIDorName(key,pg);
+    			
+    			List<Contact> list=new ArrayList<Contact>();
+    			for (Object[] row : result) {
+    				
+     				Contact cont = (Contact)row[0];
+    				System.out.println(cont);
+    				Company comp= (Company)row[1];
+    				Contact rs=new Contact();
+    				rs.setAutoID(cont.getAutoID());
+	    			rs.setComID(cont.getComID());	
+    			    rs.setContID(cont.getContID());
+    			    rs.setName(cont.getName());
+    			    rs.setCompanyname(comp.getCompanyname());
+    			    
+    			    list.add(rs);
+    			}
+    			return list;
+    		}
+    		
+    		
     	
 }
  

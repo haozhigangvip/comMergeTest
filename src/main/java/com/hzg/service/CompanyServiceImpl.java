@@ -353,6 +353,13 @@ public class CompanyServiceImpl implements CompanyService{
     							break;
     						}
     						break;	
+    						
+    					case "CompanyInfo": //更新CompanyInfo删除标记
+    						Company company=updateCompanyinfoDeltag(CompanyID,0);
+    						if(company==null){
+    							tag=0;
+    						}
+    						break;
  						
 						}
 					}
@@ -362,9 +369,7 @@ public class CompanyServiceImpl implements CompanyService{
         			  
     			       throw new RuntimeException();
     				}else{
-    				//更新CompanyInfo删除标记
-					updateCompanyinfoDeltag(CompanyID,0);
-					//删除历史记录
+    				
 					comMerge_Total.delete(comHistory_total);
 					res=0;}
     				
