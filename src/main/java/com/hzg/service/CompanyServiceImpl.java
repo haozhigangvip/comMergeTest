@@ -8,10 +8,12 @@ import com.hzg.entity.Contact;
 import com.hzg.entity.Invoice;
 import com.hzg.entity.Orders;
 import com.hzg.entity.Quote;
+import com.hzg.repository.AddressDao;
 import com.hzg.repository.CompanyDao;
 import com.hzg.repository.CompanyMergeHistoryDao;
 import com.hzg.repository.CompanyMergeHistory_TotalDao;
 import com.hzg.repository.ContactDao;
+import com.hzg.repository.InteractionDao;
 import com.hzg.repository.InvoiceDao;
 import com.hzg.repository.OrderDao;
 import com.hzg.repository.QuoteDao;
@@ -55,6 +57,7 @@ public class CompanyServiceImpl implements CompanyService{
     private InvoiceDao invoiceDao;
     @Autowired
     private ContactDao contactDao;
+    
     @Autowired
     private CompanyMergeHistory_TotalDao comMerge_Total;
     @Autowired

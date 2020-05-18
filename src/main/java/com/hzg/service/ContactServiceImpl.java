@@ -1,5 +1,6 @@
 package com.hzg.service;
 
+import com.hzg.entity.Address;
 import com.hzg.entity.Company;
 import com.hzg.entity.Contact;
 import com.hzg.entity.ContactAddress;
@@ -7,14 +8,17 @@ import com.hzg.entity.ContactEmail;
 import com.hzg.entity.ContactMerge;
 import com.hzg.entity.ContactMergeItem;
 import com.hzg.entity.ContactPhone;
+import com.hzg.entity.Interaction;
 import com.hzg.entity.Orders;
 import com.hzg.entity.Quote;
+import com.hzg.repository.AddressDao;
 import com.hzg.repository.ContactAddressDao;
 import com.hzg.repository.ContactDao;
 import com.hzg.repository.ContactEmailDao;
 import com.hzg.repository.ContactMergeDao;
 import com.hzg.repository.ContactMergeItemDao;
 import com.hzg.repository.ContactPhoneDao;
+import com.hzg.repository.InteractionDao;
 import com.hzg.repository.OrderDao;
 import com.hzg.repository.QuoteDao;
 import com.hzg.utils.myUtils;
@@ -69,7 +73,10 @@ public class ContactServiceImpl implements ContactService{
     private ContactMergeDao contMergeDao;
     @Autowired
     private ContactMergeItemDao contMergeItemDao;
-    
+    @Autowired
+    private AddressDao addressDao;
+    @Autowired
+    private InteractionDao interactionDao;
     
     
 	@Override
@@ -163,8 +170,37 @@ public class ContactServiceImpl implements ContactService{
 							}
 						}
 
+						// 更新Address表
+						List<Address> address_list=addressDao.findAllByContID(old_Cont_id);
+							if(address_list!=null && address_list.size()>0){
+								for (Address address : address_list) {
+									try {
+										saveHistory("Address",contact,newContact,address.getAutoID());
+										address.setContID(new_Cont_id);
+										addressDao.save(address);
+									} catch (Exception e) {
+										// TODO: handle exception
+										throw new RuntimeException();
+									}
+								}
+							}
+
+							// 更新Address表
+							List<Interaction> interaction_list=interactionDao.findAllByContID(old_Cont_id);
+								if(interaction_list!=null && interaction_list.size()>0){
+									for (Interaction interaction : interaction_list) {
+										try {
+											saveHistory("Interaction",contact,newContact,interaction.getAutoID());
+											interaction.setContID(new_Cont_id);
+											interactionDao.save(interaction);
+										} catch (Exception e) {
+											// TODO: handle exception
+											throw new RuntimeException();
+										}
+									}
+								}
 			
-			//更新CompanyInfo删除标记
+			//更新Contact删除标记
 						 	
 			Contact cont=updateContDelTag(old_Cont_id,1);
 			System.out.println("==============================");
@@ -368,8 +404,9 @@ public class ContactServiceImpl implements ContactService{
     							tag=0;
     							break;
     						}    						
-    						break;    						
-
+    						break;    	
+    						
+    						//更新ContactAddress表
     					case "ContactAddress":
     						ContactAddress contactAddress=contactAddressDao.findOne(tid);
     						if(contactAddress!=null&&contactAddress.getContID().trim().equals(ContactID_New)){
@@ -381,6 +418,31 @@ public class ContactServiceImpl implements ContactService{
     						}    						
     						break;    						
 
+       						//更新ContactAddress表
+        					case "Address":
+        						Address address=addressDao.findOne(tid);
+        						if(address!=null&&address.getContID().trim().equals(ContactID_New)){
+        							address.setContID(ContactID_Old);
+        							addressDao.save(address);
+        						}else{
+        							tag=0;
+        							break;
+        						}    						
+        						break;    	
+        						
+          					//更新ContactAddress表
+        					case "Interaction":
+        						Interaction interaction=interactionDao.findOne(tid);
+        						if(interaction!=null&&interaction.getContID().trim().equals(ContactID_New)){
+        							interaction.setContID(ContactID_Old);
+        							interactionDao.save(interaction);
+        						}else{
+        							tag=0;
+        							break;
+        						}    						
+        						break;    						
+
+    						
     						
 						//更新contact表删除标记
     					case "Contact":

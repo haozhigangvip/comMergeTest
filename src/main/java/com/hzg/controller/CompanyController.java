@@ -235,11 +235,11 @@ public class CompanyController {
 			int code=0;
 			 
 			if(oldList==null||oldList.size()<=0){
-				message="操作失败，请选择待合并源公司";
+				message="操作失败，请选择需要合并的客户";
 				code=2;
 				
 			}else if(newList==null || newList.size()<=0){
-				message="操作失败，请选择合并目标公司";
+				message="操作失败，请选择合并后的客户";
 				code=2;
 			}else{
 			//开始合并

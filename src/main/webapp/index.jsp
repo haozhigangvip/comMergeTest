@@ -368,7 +368,7 @@
 
 
 		<!-- Mainly scripts -->
-		<script src="js/jquery.min.js"></script>
+		<script src="js/jquery-3.1.1.min.js"></script>
 		<script src="js/jquery-ui.min.js"></script>
 		<script src="js/popper.min.js"></script>
 		<script src="js/bootstrap.js"></script>
@@ -670,40 +670,46 @@
 
 						
 										$('#btn_merge').click(function() {
+										
 											var l = Ladda.create(this);
-											
+
 											var url = "${pageContext.request.contextPath}/mergeCompany.action";
 											var title='<tr><th width="30%">comID</th><th width="50%">客户名称</th><th width="20%" style="text-align:center">操作</th></tr>'
+
 											
-											merge(url,title,"CompanyList",l);
+												merge(url,title,"CompanyList",l);
+											
+											
 											return false;
 	
 										});
 										
-										$('#btn_Contact_merge').click(function() {
+										$('#btn_Contact_merge').click(function() {												
+											var l = Ladda.create(this);
+
 											var url = "${pageContext.request.contextPath}/mergeContact.action";
 											var title='<tr><th width="30%">contID</th><th width="50%">联系人名称</th><th width="20%" style="text-align:center">操作</th></tr>'
-											merge(url,title,"Contact");
+
+											merge(url,title,"Contact",l);
 											return false;
 										});
 										
 										var merge =function($url,$title,$tab,l){
+											
 											l.start();
 											$('#loadingModal').modal({
 												backdrop : "static",
 												keyboard : false
 												});
-											var btn1 = Ladda.bind('.ladda-button-demo');
-
-										$.ajax({	type : "post",
+											
+										$.ajax({type : "post",
 											url : $url,
 											contentType : "application/json;charset=utf-8",
 											dataType : 'json',
 											data : "123",
 											success : function(data) {
-												
+												l.stop();
 												if (data["code"] == 0) {
-													l.stop(); 
 													swal({title : " ",
 														  text : data['message'],
 														  type : "success"},
@@ -712,7 +718,6 @@
 																$("table[id*='"+$tab+"']").empty();
 																$("table[id*='"+$tab+"']").append($title);
 															});} else {
-													l.stop(); 
 													swal({
 														title : " ",
 														text : data['message'],
@@ -720,7 +725,8 @@
 														closeOnConfirm : false});}
 													},
 											error : function(e) {
-												l.stop(); 
+												l.stop();
+
 					
 												swal({
 													title : "",
@@ -729,8 +735,8 @@
 													closeOnConfirm : false
 												});
 											}
-										})
-										.always(function() { l.stop(); });
+										});
+										
 										}
 									})();
 								});

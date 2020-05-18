@@ -24,7 +24,9 @@
 	<link href="css/strip.css" rel="stylesheet">
 	
     <link rel="stylesheet" type="text/css" href="css/jquery-ui.css">
-    <link rel="stylesheet" type="text/css" href="css/dataTables.jqueryui.css">	 <style>
+    <link rel="stylesheet" type="text/css" href="css/dataTables.jqueryui.css">
+    <link href="css/ladda-themeless.min.css" rel="stylesheet">
+    <style>
          .highlight {
              background-color: skyblue
          }
@@ -266,11 +268,13 @@
     <script src="js/sweetalert.min.js"></script>
     <script src="js/jquery.metisMenu.js"></script>
     <script src="js/jquery.slimscroll.min.js"></script>
-
+	
+	
     <script src="js/highlight1.js"></script>
     <script type="text/javascript" language="javascript" src="http://cdn.datatables.net/1.10-dev/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript" language="javascript" src="http://cdn.datatables.net/plug-ins/28e7751dbec/integration/jqueryui/dataTables.jqueryui.js"></script>
-
+	<script src="js/spin.min.js"></script>
+	<script src="js/ladda.min.js"></script>
 
 
 
@@ -431,7 +435,7 @@ function refreshCompanyTable(){
 								data[ii]['companyName_Old'],
 								data[ii]['companyID_New'],
 								data[ii]['companyName_New'],
-								'<button  class="btn btn-danger btn-xs center"  type="button" onclick="resumeCompany('+data[ii]['autoID']+')">还原</button>'
+								'<button  class="btn btn-danger btn-xs center" id="cpbtn'+ii+'" type="button" onclick="resumeCompany('+data[ii]['autoID']+'this);return false">还原</button>'
 								
 					        ] ).draw();
 			
@@ -469,7 +473,8 @@ function refreshContactTable(){
 								data[ii]['contactID_New'],
 								data[ii]['contactName_New'],
 								data[ii]['companyName_New'],
-								'<button  class="btn btn-danger btn-xs center"  type="button" onclick="resumeContact('+data[ii]['autoID']+')">还原</button>'
+								
+								'<button  class="btn btn-danger btn-xs center" id="ctbtn'+ii+'" type="button" onclick="resumeContact('+data[ii]['autoID']+',this)">还原</button>'
 								
 					        ] ).draw();
 			
@@ -482,9 +487,11 @@ function refreshContactTable(){
 	         });
 	
 }
-function resumeCompany(id,namefunction){
+function resumeCompany(id,namefunction,bt){
+	 var l=Ladda.create($(bt));
 	 var $url="${pageContext.request.contextPath}/resumeCompany.action";
 	 var $key=JSON.stringify({"autoID":id});
+	 l.start();
 	  $.ajax({
      	type: "post",
          url:  $url,
@@ -492,6 +499,7 @@ function resumeCompany(id,namefunction){
          dataType : 'json',
 			data:$key,
          success: function(data) {
+        	 	l.stop();
          		if(data["code"]==0){
              	   swal({
                         title:" ",
@@ -512,6 +520,7 @@ function resumeCompany(id,namefunction){
           	
              },
          error:function(e){
+        	 l.stop();
          	swal({
                  title:" " ,
                  text: e.printStackTrace,
@@ -523,7 +532,7 @@ function resumeCompany(id,namefunction){
 
 }
 
-function resumeContact(id,namefunction){
+function resumeContact(id,namefunction,bt){
 	 var $url="${pageContext.request.contextPath}/resumeContact.action";
 	 var $key=JSON.stringify({"autoID":id});
 	  $.ajax({
@@ -553,6 +562,7 @@ function resumeContact(id,namefunction){
          	
             },
         error:function(e){
+    		l.stop();
         	swal({
                 title:" " ,
                 text: e.printStackTrace,

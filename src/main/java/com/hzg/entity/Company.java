@@ -39,7 +39,7 @@ public class Company {
     @Column(name = "AutoID")
     private Integer AutoID;
 
-    @Column(name = "comID" ,updatable = false)
+    @Column(name = "comID"	)
     private String comID;
     public String getComID() {
 		return comID;
