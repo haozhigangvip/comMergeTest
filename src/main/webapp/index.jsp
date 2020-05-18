@@ -334,7 +334,7 @@
 										<nav class="navbar navbar-static-top" role="navigation"
 											style="margin-bottom: 0">
 											<div class="navbar-header">
-												<button type="submit" class="btn btn-primary" id="btn_Contact_merge">开始合并</button>
+												<button type="submit" class="btn btn-primary"   data-style="zoom-in"  id="btn_Contact_merge">开始合并</button>
 											</div>
 										</nav>
 

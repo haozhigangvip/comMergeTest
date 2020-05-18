@@ -281,7 +281,7 @@
 <script type="text/javascript">
 jQuery(function ($) {
 	$(document).ready(function () {
- 		
+
  var initTable=function(){
 	 var dt=[];
 	 var t ;
@@ -435,7 +435,7 @@ function refreshCompanyTable(){
 								data[ii]['companyName_Old'],
 								data[ii]['companyID_New'],
 								data[ii]['companyName_New'],
-								'<button  class="btn btn-danger btn-xs center" id="cpbtn'+ii+'" type="button" onclick="resumeCompany('+data[ii]['autoID']+'this);return false">还原</button>'
+								'<button  class="btn btn-danger btn-xs"  data-style="zoom-out" id="cpbtn'+ii+'" type="button" onclick="resumeCompany('+data[ii]['autoID']+',&#39;cpbtn'+ii+'&#39;);return false">还原</button>'
 								
 					        ] ).draw();
 			
@@ -474,7 +474,7 @@ function refreshContactTable(){
 								data[ii]['contactName_New'],
 								data[ii]['companyName_New'],
 								
-								'<button  class="btn btn-danger btn-xs center" id="ctbtn'+ii+'" type="button" onclick="resumeContact('+data[ii]['autoID']+',this)">还原</button>'
+								'<button  class="btn btn-danger btn-xs"  data-style="zoom-out" id="ctbtn'+ii+'" type="button" onclick="resumeContact('+data[ii]['autoID']+',&#39;ctbtn'+ii+'&#39;)">还原</button>'
 								
 					        ] ).draw();
 			
@@ -487,8 +487,8 @@ function refreshContactTable(){
 	         });
 	
 }
-function resumeCompany(id,namefunction,bt){
-	 var l=Ladda.create($(bt));
+function resumeCompany(id,bt){
+	 var l = Ladda.create( document.querySelector( '#'+bt ) );
 	 var $url="${pageContext.request.contextPath}/resumeCompany.action";
 	 var $key=JSON.stringify({"autoID":id});
 	 l.start();
@@ -532,7 +532,9 @@ function resumeCompany(id,namefunction,bt){
 
 }
 
-function resumeContact(id,namefunction,bt){
+function resumeContact(id,bt){
+	var l = Ladda.create( document.querySelector( '#'+bt ) );
+	 l.start();
 	 var $url="${pageContext.request.contextPath}/resumeContact.action";
 	 var $key=JSON.stringify({"autoID":id});
 	  $.ajax({
@@ -542,6 +544,7 @@ function resumeContact(id,namefunction,bt){
         dataType : 'json',
 			data:$key,
         success: function(data) {
+        	l.stop();
         		if(data["code"]==0){
             	   swal({
                        title:" ",

@@ -34,6 +34,7 @@
                         <bean class="org.hibernate.jpa.HibernatePersistenceProvider"/>
                 </property>
                 <!-- JPA供应商适配器，由谁实现JPA-->
+                
                 <property name="jpaVendorAdapter">
                         <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
                                 <!--设置是否自动创建数据库表为-->
@@ -43,7 +44,6 @@
                                 <property name="database" value="SQL_SERVER"/>
                                 <!--设置数据库方言：支持的特有语法-->
                                 <property name="databasePlatform" value="org.hibernate.dialect.SQLServer2008Dialect"/>
-                                
                                 <!--设置数据库是否显示sql语句-->
                                 <property name="showSql" value="true"/>
                               
@@ -53,6 +53,7 @@
                 <property name="jpaDialect">
                         <!--注入HibernateJPA高级特性-->
                         <bean class="org.springframework.orm.jpa.vendor.HibernateJpaDialect"/>
+                        
                 </property>
         </bean>
         <!-- 2.创建数据库连接池
@@ -68,7 +69,7 @@
                 <property name="jdbcUrl" value="jdbc:sqlserver://127.0.0.1:1433; DatabaseName=tsbio"></property>
                 <!--配置数据库驱动-->
                 <property name="driverClass" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"></property>
-
+				
         </bean>
 
         <!--3。整合Spring data JPA
