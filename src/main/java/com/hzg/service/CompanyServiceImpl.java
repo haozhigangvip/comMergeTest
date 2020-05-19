@@ -161,7 +161,6 @@ public class CompanyServiceImpl implements CompanyService{
 	public Company updateCompanyinfoDeltag(String old_Com_id,int tag){
 		// 更新CompanyInfo Deltag
 					Company cp=companyDao.findCompanyByComID(old_Com_id);
-					System.out.println(old_Com_id);
 					cp.setDelTag(tag);
 					try {
 						companyDao.save(cp);
@@ -175,10 +174,7 @@ public class CompanyServiceImpl implements CompanyService{
 						return cp;
 					}
 	}
-	
-	
-	
-	//保存到更新历史记录
+		//保存到更新历史记录
 	private void saveHistory(String TableName,String oldComID,String oldComName,String newComID,String newComName,int tableKeyID){
 		if(oldComID!=null  & newComID!=null){
 		Timestamp createtime=new Timestamp(System.currentTimeMillis());
