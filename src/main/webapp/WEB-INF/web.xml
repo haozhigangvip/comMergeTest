@@ -17,7 +17,7 @@
 	</listener>
     <!--配置springmvc DispatcherServlet-->
     <servlet>
-        <servlet-name>comMerge</servlet-name>
+        <servlet-name>comMergeTest</servlet-name>
    		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
  		<!--导入springMVC配置文件ApplicationContext.xml  -->
  		<init-param>
@@ -35,7 +35,7 @@
     
    
     <servlet-mapping>
-        <servlet-name>comMerge</servlet-name>
+        <servlet-name>comMergeTest</servlet-name>
         <url-pattern>*.action</url-pattern>
     </servlet-mapping>
     <servlet-mapping>

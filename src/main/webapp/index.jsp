@@ -71,7 +71,9 @@
 
 				</nav>
 			</div>
-			
+			<form action="${pageContext.request.contextPath}/zoho/login.action" method="post">
+				<button type="submit">登录</button>
+			</form>
 			<div class="row wrapper border-bottom white-bg page-heading">
 				<div class="col-lg-10">
 					<h2>合并客户/联系人</h2>
@@ -303,8 +305,7 @@
 												</div>
 											</div>
 											<div class="activity-stream" id="tab2" >
-												<table class="table table-bordered table-striped"
-													id="newContactList">
+												<table class="table table-bordered table-striped" id="newContactList">
 													<thead>
 														<tr>
 															<th width="10%">contID</th>
@@ -487,7 +488,7 @@
 											$("#" + tablekey).empty();
 
 											if(tablekey.indexOf('Contact')>0){
-												$("#" + tablekey).append('<tr><th width="10%">contID</th><th width="20%">联系人名称</th><th width="60%">公司名称</th><th width="10%" style="text-align:center">操作</th></tr>');
+												$("#" + tablekey).append('<thead><tr><th width="10%">contID</th><th width="20%">联系人名称</th><th width="60%">公司名称</th><th width="10%" style="text-align:center">操作</th></tr></thead><tr></tr>');
 												if(data!=null){
 													for (var i = 0; i < data.length; i++) {
 														var trHTML = '<tr ><td>'
@@ -513,7 +514,7 @@
  
 													}
 											}else{
-												$("#" + tablekey).append('<tr><th width="30%">comID</th><th width="50%">客户名称</th><th width="20%" style="text-align:center">操作</th></tr>');
+												$("#" + tablekey).append('<thead><tr><th width="30%">comID</th><th width="50%">客户名称</th><th width="20%" style="text-align:center">操作</th></tr></thead><tr></tr>');
 												if(data!=null){
 													for (var i = 0; i < data.length; i++) {
 														var trHTML = '<tr ><td>'

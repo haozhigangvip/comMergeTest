@@ -22,7 +22,7 @@
                            http://www.springframework.org/schema/data/jpa
                            http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
 
-  
+
         <!--配置SpringMvc-->
         <!-- 配置@Controller注解扫描 -->
         <!-- base-package为Controller所在的包的限定名 -->
